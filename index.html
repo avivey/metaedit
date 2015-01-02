@@ -1,19 +1,32 @@
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="metaedit.css">
     <script src="https://google.github.io/traceur-compiler/bin/traceur.js"></script>
     <script src="https://google.github.io/traceur-compiler/src/bootstrap.js"></script>
-    <script>
-      traceur.options.experimental = true;
-    </script>
 
-    <script src="load-nodejs-modules.min.js" ></script>
+    <script src="load-nodejs-modules.js" ></script>
   <!-- <script  src="metadataedit.js"> -->
-    <script type="module" >
-      import {test} from 'app/main';
-    </script>
+    <script type="module" src="app/main.js"></script>
+
 </head>
 <body>
+<div id="rightbar">
+navigation area
+<h3>Branches:</h3>
+<ul id="branchList"></ul>
+<button id="update_branches">update</button>
 
+</div>
+<div id="top" class="mainarea" >
+<h2>Title and some info</h2>
+lkiek title
+or maybe
+some
+</div>
+<div id="main"  class="mainarea" >
+<h2>main work area</h2>
+<textarea id="the_textarea" rows="25" cols="100"></textarea>
+</div>
 
 </body>
 </html>

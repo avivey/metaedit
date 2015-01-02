@@ -1,0 +1,24 @@
+body {
+  /* margin: 0; */
+}
+
+
+div#rightbar {
+  min-width: 20%;
+  float: right;
+  padding-right: 0;
+  height: 100%;
+}
+
+div.mainarea {
+  max-width: 80%;
+}
+
+.link_like {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.link_like:hover {
+  color: red;
+}

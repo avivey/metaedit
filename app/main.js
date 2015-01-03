@@ -1,4 +1,4 @@
-
+"use strict";
 
 var githubRepoName = "avivey/test-jsgit";
 
@@ -21,17 +21,20 @@ var HEAD = null
 
 var author_object = { name: "Aviv Eyal", email: 'avivey@gmail.com' }
 
+import {ref_to_project_name} from 'app/projects';
 
 ui_elements.update_branches_button.onclick = function() {
   run(function*() {
-    var refs = yield repo.listRefs('heads/test');
+    var refs = yield repo.listRefs();
     var target = ui_elements.branch_list
 
     target.innerHTML = ''
     for (let ref of refs) {
+      var project = ref_to_project_name(ref)
+      if (!project) continue
       var li = document.createElement("li")
       li.className = "link_like"
-      li.innerHTML = ref
+      li.innerHTML = project
       li.onclick = () => load_branch(ref)
       target.appendChild(li)
     }

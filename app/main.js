@@ -1,5 +1,13 @@
 
-var repo = externals.jsgit.repo
+
+var githubRepoName = "avivey/test-jsgit";
+
+// Your user can generate these manually at https://github.com/settings/tokens/new
+// Or you can use an oauth flow to get a token for the user.
+var githubToken = "341c2751e26554dcbf44e0995148a4e4177ee07b";
+
+
+var repo = externals.jsgit.connect_to_repo(githubRepoName, githubToken)
 
 import * as ui_elements from 'app/ui_setup'
 

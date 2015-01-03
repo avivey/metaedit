@@ -22,3 +22,7 @@ div.mainarea {
 .link_like:hover {
   color: red;
 }
+
+#the_textarea {
+  display: block;
+}

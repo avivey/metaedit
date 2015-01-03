@@ -17,9 +17,7 @@ function log(something = "foo") {
 
 var run = externals.gen_run
 
-var current_branch = ''
-var last_head = ''
-var last_tree = ''
+var HEAD = null
 
 var author_object = { name: "Aviv Eyal", email: 'avivey@gmail.com' }
 
@@ -40,26 +38,27 @@ ui_elements.update_branches_button.onclick = function() {
   })
 }
 
-var load_branch = function(branch) {
+var load_branch = function(ref) {
   run(function*() {
-    var headHash = yield repo.readRef(branch);
-    var commit = yield repo.loadAs("commit", headHash);
+    var hash = yield repo.readRef(ref);
+    var commit = yield repo.loadAs("commit", hash);
     var tree = yield repo.loadAs("tree", commit.tree);
     var entry = tree["README.md"];
     var readme = yield repo.loadAs("text", entry.hash);
 
-    current_branch = branch;
-    last_head = headHash
-    last_tree = commit.tree
-    ui_elements.branch_span.textContent = branch;
+    HEAD = {
+      ref,
+      hash,
+      commit,
+    }
+    ui_elements.branch_span.textContent = ref;
     ui_elements.textarea.value = readme;
   })
 }
 
 ui_elements.commit_button.onclick = function() {
   run(function*() {
-    const save_to = current_branch
-    if (!(/^refs\//).test(save_to)) {
+    if (!HEAD) {
       log('curr branch isnt real, not commiting')
       return
     }
@@ -71,7 +70,7 @@ ui_elements.commit_button.onclick = function() {
         content: ui_elements.textarea.value
       }
     ]
-    update.base = last_tree
+    update.base = HEAD.commit.tree
 
     var treeHash = yield repo.createTree(update)
 
@@ -79,13 +78,13 @@ ui_elements.commit_button.onclick = function() {
       "commit",
       {
         tree: treeHash,
-        parent: last_head,
+        parent: HEAD.hash,
         author: author_object,
         message: "automatic save"
       }
     );
 
-    yield repo.updateRef(save_to, commitHash)
-    load_branch(save_to)
+    yield repo.updateRef(HEAD.ref, commitHash)
+    load_branch(HEAD.ref)
   })
 }

@@ -3,8 +3,8 @@ body {
 }
 
 
-div#rightbar {
-  min-width: 20%;
+div#navigation_bar {
+  width: 20%;
   float: right;
   padding-right: 0;
   height: 100%;
@@ -14,6 +14,7 @@ div.mainarea {
   max-width: 80%;
 }
 
+a,
 .link_like {
   cursor: pointer;
   text-decoration: underline;

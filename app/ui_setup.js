@@ -8,4 +8,4 @@ export var textarea = q('the_textarea');
 export var branch_span = q('current_branch')
 export var commit_button = q('save_changes')
 
-
+export var update_master_button = q('update_master')

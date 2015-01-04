@@ -1,0 +1,49 @@
+{
+    "linters": {
+        "chmod": {
+            "type": "chmod"
+        },
+        "filename": {
+            "type": "filename"
+        },
+        "generated": {
+            "type": "generated"
+        },
+        "jshint": {
+            "include": "(\\.js$)",
+            "type": "jshint"
+        },
+        "json": {
+            "include": "(\\.json$)",
+            "type": "jsonlint"
+        },
+        "merge-conflict": {
+            "type": "merge-conflict"
+        },
+        "nolint": {
+            "type": "nolint"
+        },
+        "python pep8": {
+            "include": "(\\.py$)",
+            "severity": {
+                "E301": "advice",
+                "E302": "advice",
+                "E303": "advice",
+                "E501": "warning"
+            },
+            "type": "flake8"
+        },
+        "ruby": {
+            "include": [
+                "(\\.rb$)"
+            ],
+            "type": "ruby"
+        },
+        "spelling": {
+            "type": "spelling"
+        },
+        "text": {
+            "type": "text"
+        }
+    }
+}

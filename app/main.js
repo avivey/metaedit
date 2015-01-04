@@ -1,14 +1,11 @@
 "use strict";
 
-var githubRepoName = "avivey/test-jsgit";
-
-// Your user can generate these manually at https://github.com/settings/tokens/new
-// Or you can use an oauth flow to get a token for the user.
-var githubToken = "341c2751e26554dcbf44e0995148a4e4177ee07b";
 
 
-var repo = externals.jsgit.connect_to_repo(githubRepoName, githubToken)
+import {githubUsername, githubRepoName, githubUpstreamOrg, githubToken} from 'app/config';
 
+var repo = externals.jsgit.connect_to_repo(githubUsername+'/'+githubRepoName, githubToken);
+console.log(repo)
 import * as ui_elements from 'app/ui_setup'
 
 function log(something = "foo") {
@@ -30,13 +27,13 @@ ui_elements.update_branches_button.onclick = function() {
 
     target.innerHTML = ''
     for (let ref of refs) {
-      var project = ref_to_project_name(ref)
-      if (!project) continue
-      var li = document.createElement("li")
-      li.className = "link_like"
-      li.innerHTML = project
-      li.onclick = () => load_branch(ref)
-      target.appendChild(li)
+      var project = ref_to_project_name(ref);
+      if (!project) continue;
+      var li = document.createElement("li");
+      li.className = "link_like";
+      li.innerHTML = project;
+      li.onclick = () => load_branch(ref);
+      target.appendChild(li);
     }
   })
 }
@@ -56,7 +53,13 @@ var load_branch = function(ref) {
     }
     ui_elements.branch_span.textContent = ref;
     ui_elements.textarea.value = readme;
+    editor_changed = false
   })
+}
+
+var editor_changed = false
+ui_elements.textarea.onchange = function() {
+  editor_changed = true;
 }
 
 ui_elements.commit_button.onclick = function() {
@@ -64,6 +67,10 @@ ui_elements.commit_button.onclick = function() {
     if (!HEAD) {
       log('curr branch isnt real, not commiting')
       return
+    }
+    if (!editor_changed) {
+      log('No changes in editor - not committing');
+      return;
     }
 
     var update = [
@@ -91,3 +98,19 @@ ui_elements.commit_button.onclick = function() {
     load_branch(HEAD.ref)
   })
 }
+
+ui_elements.update_master_button.onclick = function() {
+  run(function*() {
+    var upstream = externals.jsgit.connect_to_repo(
+      githubUpstreamOrg+'/'+githubRepoName,
+      githubToken);
+
+    var upstreamHash = yield upstream.readRef('refs/heads/master');
+    yield repo.updateRef('refs/heads/master', upstreamHash);
+    log("ok");
+  });
+}
+
+
+
+

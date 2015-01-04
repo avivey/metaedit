@@ -16,7 +16,7 @@ import {refs_namespace} from 'app/config';
 */
 
 function Project(repository, name, ref) {
-  this.repository_ = repository;
+  this.repository = repository;
   this.name = name;
   this.ref = ref;
 }

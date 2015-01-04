@@ -39,7 +39,7 @@ function connect_to_repo(githubRepoName, githubToken) {
   // This adds in walker algorithms for quickly walking history or a tree.
   // - logWalk(ref|hash) => stream<commit>
   // - treeWalk(hash) => stream<object>
-  // require('js-git/mixins/walkers')(repo_object);
+  require('js-git/mixins/walkers')(repo_object);
 
   // This combines parallel requests for the same resource for effeciency under load.
   require('js-git/mixins/read-combiner')(repo_object);

@@ -27,3 +27,7 @@ a,
 #the_textarea {
   display: block;
 }
+
+.inline {
+  display: inline;
+}

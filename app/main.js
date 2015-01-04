@@ -5,7 +5,7 @@
 import {githubUsername, githubRepoName, githubUpstreamOrg, githubToken} from 'app/config';
 
 var repo = externals.jsgit.connect_to_repo(githubUsername+'/'+githubRepoName, githubToken);
-console.log(repo)
+
 import * as ui_elements from 'app/ui_setup'
 
 function log(something = "foo") {
@@ -107,10 +107,33 @@ ui_elements.update_master_button.onclick = function() {
 
     var upstreamHash = yield upstream.readRef('refs/heads/master');
     yield repo.updateRef('refs/heads/master', upstreamHash);
-    log("ok");
   });
+}
+
+import {listAllMods} from 'app/ckan/file_browser';
+
+ui_elements.update_files_button.onclick = function() {
+  run(function*() {
+    var allMods = yield* listAllMods(repo, HEAD.commit.tree);
+    var target = ui_elements.files_list;
+
+    target.innerHTML = '';
+    for (let mod in allMods) {
+      let modTreeHash = allMods[mod]
+      var li = document.createElement("li");
+      li.className = "link_like";
+      li.innerHTML = mod;
+      li.onclick = () => list_files_for_mod(mod, modTreeHash);
+      target.appendChild(li);
+    }
+
+  });
+}
+
+function list_files_for_mod(mod, hash) {
+
 }
 
 
 
-
+ui_elements.update_branches_button.onclick()

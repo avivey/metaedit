@@ -11,6 +11,7 @@
         },
         "jshint": {
             "include": "(\\.js$)",
+            "jshint.jshintrc": ".jshintrc",
             "type": "jshint"
         },
         "json": {

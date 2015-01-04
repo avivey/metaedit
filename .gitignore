@@ -1,1 +1,3 @@
 load-nodejs-modules.*.js
+node_modules/
+test_in_node/

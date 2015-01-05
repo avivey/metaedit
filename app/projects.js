@@ -13,6 +13,11 @@ import {refs_namespace} from 'app/config';
       ref: string, full refname of the "from" branch for the pr.
     }
   }
+
+
+  Project is almost identical to branch.
+  Consider if `master` is "project" or "almost project" or if we need an
+  abstraction for "branch".
 */
 
 function Project(repository, name, ref) {

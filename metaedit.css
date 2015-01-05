@@ -24,7 +24,6 @@ div.mainarea {
 
 #files_list_div {
   max-height: 12em;
-  overflow-y: scroll;
   overflow-x: hidden;
 }
 

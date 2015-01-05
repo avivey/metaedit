@@ -1,0 +1,3 @@
+- delete project button: check if PR is closed, warn otherwise.
+- auto update all/one project. blow up if conflict.
+- login flow, storage.

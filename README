@@ -1,0 +1,9 @@
+metaedit
+--------
+
+- what, who, how
+
+Usage:
+- New project is always branched of `master`. Either pick a name before starting, or when saving first file.
+- So you can actually browse stuff before you start editing.
+- You can update `master` with the upstream with a single click.

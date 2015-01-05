@@ -1,22 +1,20 @@
 "use strict";
 
-
+// TODO just about nothing should actually stay in this file.
 
 import {githubUsername, githubRepoName, githubUpstreamOrg, githubToken} from 'app/config';
 
 var repo = externals.jsgit.connect_to_repo(githubUsername+'/'+githubRepoName, githubToken);
 
-import * as ui_elements from 'app/ui_setup'
+import * as ui_elements from 'app/ui_setup';
 
-function log(something = "foo") {
-  console.log(something)
-}
+import {log} from 'lib/debug';
 
 var run = externals.gen_run
 
 var HEAD = null
 
-var author_object = { name: "Aviv Eyal", email: 'avivey@gmail.com' }
+import * as github from 'app/github';
 
 import {ref_to_project_name} from 'app/projects';
 
@@ -54,14 +52,19 @@ var load_branch = function(ref) {
     ui_elements.branch_span.textContent = ref;
     ui_elements.textarea.value = readme;
     editor_changed = false
+
+    on_project_loaded();
   })
 }
+
+
 
 var editor_changed = false
 ui_elements.textarea.onchange = function() {
   editor_changed = true;
 }
 
+var author_object = run(github.getAuthorInformation)
 ui_elements.commit_button.onclick = function() {
   run(function*() {
     if (!HEAD) {
@@ -110,30 +113,22 @@ ui_elements.update_master_button.onclick = function() {
   });
 }
 
-import {listAllMods} from 'app/ckan/file_browser';
+import { plugInUI as plugInUIckan } from 'app/ckan/file_browser';
 
-ui_elements.update_files_button.onclick = function() {
-  run(function*() {
-    var allMods = yield* listAllMods(repo, HEAD.commit.tree);
-    var target = ui_elements.files_list;
+function TODO(a=undefined) {}
 
-    target.innerHTML = '';
-    for (let mod in allMods) {
-      let modTreeHash = allMods[mod]
-      var li = document.createElement("li");
-      li.className = "link_like";
-      li.innerHTML = mod;
-      li.onclick = () => list_files_for_mod(mod, modTreeHash);
-      target.appendChild(li);
-    }
+var ckanFileBrowser = plugInUIckan(
+  repo,
 
-  });
+  ui_elements.files_list_1,
+  ui_elements.files_list_2,
+
+  TODO
+);
+
+ui_elements.update_files_button.onclick = ()=> run(ckanFileBrowser.update(repo, HEAD.commit.tree));
+
+function on_project_loaded() {
+  ui_elements.update_files_button.onclick()
 }
-
-function list_files_for_mod(mod, hash) {
-
-}
-
-
-
 ui_elements.update_branches_button.onclick()

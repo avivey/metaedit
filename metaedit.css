@@ -1,8 +1,3 @@
-body {
-  /* margin: 0; */
-}
-
-
 div#navigation_bar {
   width: 20%;
   float: right;
@@ -14,7 +9,6 @@ div.mainarea {
   max-width: 80%;
 }
 
-a,
 .link_like {
   cursor: pointer;
   text-decoration: underline;
@@ -28,6 +22,12 @@ a,
   display: block;
 }
 
-.inline {
+#files_list_div {
+  max-height: 12em;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+details summary h3 {
   display: inline;
 }

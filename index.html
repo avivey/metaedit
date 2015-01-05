@@ -15,19 +15,22 @@
 <body>
 <div id="navigation_bar">
 <details open="true"><!-- TODO this doesn't work in ff or ie. use javascript. -->
-  <summary><h3 class="inline">Projects:</h3></summary>
+  <summary><h3>Projects:</h3></summary>
   <ul id="project_list"></ul>
   <button id="update_branches">update</button>
   <button id="new_project" enabled="false">new project</button>
 </details>
-<div>
-  <h3>Changed Files</h3>
-</div>
-<details open="true">
-  <summary><h3 class="inline">Files</h3></summary>
-  <ul id="files_list"></ul>
+<details>
+  <summary><h3>Changed Files</h3></summary>
+</details>
+<details open="true" id="files_list_div">
+  <summary><h3 >Files</h3></summary>
+  <ul id="files_list_1"></ul>
+  <ul id="files_list_2"></ul>
   <button id="update_files">update</button>
 </details>
+
+
 <div>
   <h3>Actions</h3>
   <ul>

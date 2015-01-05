@@ -55,7 +55,8 @@ externals = {
   jsgit: {
     connect_to_repo: connect_to_repo
   },
-  gen_run: require('gen-run')
+  gen_run: require('gen-run'),
+  stringify: require('json-stable-stringify'),
 }
 
 module.exports = externals

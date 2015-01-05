@@ -10,6 +10,7 @@ export var files_list_2 = q('files_list_2');
 export var update_files_button = q('update_files');
 
 export var textarea = q('the_textarea');
+export var json_editor = q('json_editor');
 export var branch_span = q('current_branch')
 export var commit_button = q('save_changes')
 

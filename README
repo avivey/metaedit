@@ -7,3 +7,10 @@ Usage:
 - New project is always branched of `master`. Either pick a name before starting, or when saving first file.
 - So you can actually browse stuff before you start editing.
 - You can update `master` with the upstream with a single click.
+
+
+Used and included libs:
+- js-git, js-github, gen-run from https://github.com/creationix/ (MIT license)
+- https://github.com/jdorn/json-editor (MIT)
+- https://www.npmjs.com/package/json-stable-stringify (MIT)
+- https://github.com/substack/node-browserify (MIT)

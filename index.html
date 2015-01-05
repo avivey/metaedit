@@ -1,15 +1,16 @@
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="metaedit.css">
-    <script
-      src="https://google.github.io/traceur-compiler/bin/traceur.js"></script>
-    <script
-      src="https://google.github.io/traceur-compiler/src/bootstrap.js"></script>
+  <link rel="stylesheet" type="text/css" href="metaedit.css">
+  <script
+    src="https://google.github.io/traceur-compiler/bin/traceur.js"></script>
+  <script
+    src="https://google.github.io/traceur-compiler/src/bootstrap.js"></script>
 
-    <script src="load-nodejs-modules.min.js" ></script>
-  <!-- <script  src="metadataedit.js"> -->
-    <script type="module" src="app/main.js"></script>
-    <!-- <script type="module" src="app/test.js"></script> -->
+  <script src="ext/load-nodejs-modules.min.js" ></script>
+  <script src="ext/jsoneditor.min.js"></script>
+
+  <script type="module" src="app/main.js"></script>
+  <!-- <script type="module" src="app/test.js"></script> -->
 
 </head>
 <body>
@@ -54,6 +55,7 @@ some
   <h2>main work area</h2>
   Current project: <span id="current_branch">none</span>
   <button id="save_changes">commit</button>
+  <div id="json_editor"></div>
   <textarea id="the_textarea" rows="25" cols="100"></textarea>
 
 

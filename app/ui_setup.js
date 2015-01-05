@@ -14,3 +14,4 @@ export var branch_span = q('current_branch')
 export var commit_button = q('save_changes')
 
 export var update_master_button = q('update_master')
+export var close_active_project_button = q('close_active_project')

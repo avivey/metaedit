@@ -4,7 +4,9 @@ search mods, ignore version
   list versions
     maybe show mode full name
     edit version or copy to new version
+    maybe copy to new undefined version
 
+should maybe know if it's reading master or a project?
 
 */
 "use strict";
@@ -81,7 +83,7 @@ var magic_numbers = {
   commit: parseInt("160000", 8),
 }
 
-export function* listAllMods(repository, tree_hash) {
+export function* listAllMods(repository, tree_hash, path = '') {
   var tree = yield repository.loadAs('tree', tree_hash);
   var allMods = [];
   for (let name in tree) {
@@ -89,7 +91,7 @@ export function* listAllMods(repository, tree_hash) {
     if (ob.mode != magic_numbers.tree) continue;
 
     ob.name = name;
-    ob.path = '/'+name;  // TODO fixit
+    ob.path = path + name;
     allMods.push(ob);
   }
 

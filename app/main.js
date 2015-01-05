@@ -12,11 +12,13 @@ import {log} from 'lib/debug';
 
 var run = externals.gen_run
 
-var HEAD = null
+var HEAD = null // This object is evil and ugly. kill it.
+var MASTER = null // this one is also bad.
 
 import * as github from 'app/github';
 
 import {ref_to_project_name} from 'app/projects';
+import * as editor from 'app/ckan/editor';
 
 ui_elements.update_branches_button.onclick = function() {
   run(function*() {
@@ -42,7 +44,8 @@ var load_branch = function(ref) {
     var commit = yield repo.loadAs("commit", hash);
     var tree = yield repo.loadAs("tree", commit.tree);
     var entry = tree["README.md"];
-    var readme = yield repo.loadAs("text", entry.hash);
+
+    yield* editor.loadNewFile(repo, {hash: entry.hash});
 
     HEAD = {
       ref,
@@ -50,19 +53,36 @@ var load_branch = function(ref) {
       commit,
     }
     ui_elements.branch_span.textContent = ref;
-    ui_elements.textarea.value = readme;
-    editor_changed = false
 
     on_project_loaded();
   })
 }
 
 
+function* readMaster() {
+  var ref = 'refs/heads/master';
+  var hash = yield repo.readRef(ref);
+  var commit = yield repo.loadAs("commit", hash);
+  var tree = yield repo.loadAs("tree", commit.tree);
+  var entry = tree["README.md"];
+  yield* editor.loadNewFile(repo, {hash: entry.hash});
 
-var editor_changed = false
-ui_elements.textarea.onchange = function() {
-  editor_changed = true;
+  MASTER = {
+    ref,
+    hash,
+    commit,
+  }
+  HEAD = null;
+  ui_elements.branch_span.textContent = 'none';
+
+  yield* ckanFileBrowser.update(repo, MASTER.commit.tree)
 }
+ui_elements.close_active_project_button.onclick = ()=>run(readMaster);
+
+
+
+
+
 
 var author_object = run(github.getAuthorInformation)
 ui_elements.commit_button.onclick = function() {
@@ -123,7 +143,7 @@ var ckanFileBrowser = plugInUIckan(
   ui_elements.files_list_1,
   ui_elements.files_list_2,
 
-  TODO
+  file => run(editor.loadNewFile(repo, file))
 );
 
 ui_elements.update_files_button.onclick = ()=> run(ckanFileBrowser.update(repo, HEAD.commit.tree));
@@ -132,3 +152,4 @@ function on_project_loaded() {
   ui_elements.update_files_button.onclick()
 }
 ui_elements.update_branches_button.onclick()
+ui_elements.close_active_project_button.onclick()

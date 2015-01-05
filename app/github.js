@@ -27,3 +27,57 @@ function* apiRequest(api_uri, body = undefined) {
   var uri = githubApiRoot + api_uri;
   unimpl()
 }
+
+export function* saveFile(project, path, content, mode = '100644') {
+
+    var update = [
+      {
+        path: 'README.md',
+        mode: '100644',
+        content: ui_elements.textarea.value
+      }
+    ]
+    update.base = HEAD.commit.tree
+
+    var treeHash = yield repo.createTree(update)
+
+    var commitHash = yield repo.saveAs(
+      "commit",
+      {
+        tree: treeHash,
+        parent: HEAD.hash,
+        author: author_object,
+        message: "automatic save"
+      }
+    );
+
+    yield repo.updateRef(HEAD.ref, commitHash)
+    workspace.loadProject(workspace.getActiveProject());
+}
+
+function squashChanges(base, workbranch, targetBranch) {
+
+/*
+    var update = [
+      {
+        path: 'README.md',
+        mode: '100644',
+        content: ui_elements.textarea.value
+      }
+    ]
+    update.base = HEAD.commit.tree
+
+    var treeHash = yield repo.createTree(update)
+
+    var commitHash = yield repo.saveAs(
+      "commit",
+      {
+        tree: treeHash,
+        parent: HEAD.hash,
+        author: author_object,
+        message: "automatic save"
+      }
+    );
+
+    yield repo.updateRef(HEAD.ref, commitHash)*/
+}

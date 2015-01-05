@@ -7,7 +7,6 @@ export var update_branches_button = q('update_branches');
 
 export var files_list_1 = q('files_list_1');
 export var files_list_2 = q('files_list_2');
-export var update_files_button = q('update_files');
 
 export var textarea = q('the_textarea');
 export var json_editor = q('json_editor');

@@ -14,11 +14,14 @@ import {log} from 'lib/debug';
 import * as network from 'lib/network';
 
 var json_editor;
-export var editor_changed = false;
+var editor_changed = false;
+export function isEditorChanged() { return editor_changed; }
+var active_file = null;
+export function getActiveFile() { return active_file; }
 
 // TODO define "file" object.
 export function* loadNewFile(repository, file) {
-
+  // TODo alert if editor_changed or sometihng.
   var content = yield repository.loadAs("text", file.hash);
 
   try {
@@ -29,9 +32,9 @@ export function* loadNewFile(repository, file) {
     return;
   }
 
+  active_file = file;
   json_editor.setValue(content);
-  // TODo alert if editor_changed or sometihng.
-  editor_changed = false
+  editor_changed = false;
 }
 
 export function* getContentAsString() {
@@ -48,7 +51,7 @@ export function* getContentAsString() {
 
 
 externals.gen_run(function*() {
-  var schema = yield* network.request('CKAN.schema'); // TODO move this
+  var schema = yield* network.request('ext/CKAN.schema'); // TODO move this
   var editor_options = {
     schema: JSON.parse(schema),
     disable_edit_json: true,

@@ -12,118 +12,60 @@ import {log} from 'lib/debug';
 
 var run = externals.gen_run
 
-var HEAD = null // This object is evil and ugly. kill it.
-var MASTER = null // this one is also bad.
-
 import * as github from 'app/github';
 
-import {ref_to_project_name} from 'app/projects';
+import {ref_to_project_name, getAllProjects} from 'app/projects';
+import * as workspace from 'app/workspace';
+import * as projects from 'app/projects';
 import * as editor from 'app/ckan/editor';
 
 ui_elements.update_branches_button.onclick = function() {
   run(function*() {
-    var refs = yield repo.listRefs();
+    var projectList = yield* projects.getAllProjects(repo);
+
     var target = ui_elements.branch_list
 
     target.innerHTML = ''
-    for (let ref of refs) {
-      var project = ref_to_project_name(ref);
-      if (!project) continue;
+    for (let name in projectList) {
+      let project = projectList[name];
+
       var li = document.createElement("li");
       li.className = "link_like";
-      li.innerHTML = project;
-      li.onclick = () => load_branch(ref);
+      li.innerHTML = name;
+      li.onclick = () => run(workspace.loadProject(project));
       target.appendChild(li);
     }
   })
 }
 
-var load_branch = function(ref) {
-  run(function*() {
-    var hash = yield repo.readRef(ref);
-    var commit = yield repo.loadAs("commit", hash);
-    var tree = yield repo.loadAs("tree", commit.tree);
-    var entry = tree["README.md"];
-
-    yield* editor.loadNewFile(repo, {hash: entry.hash});
-
-    HEAD = {
-      ref,
-      hash,
-      commit,
-    }
-    ui_elements.branch_span.textContent = ref;
-
-    on_project_loaded();
-  })
+ui_elements.close_active_project_button.onclick = ()=> {
+  run(workspace.loadProject(null, repo));
 }
-
-
-function* readMaster() {
-  var ref = 'refs/heads/master';
-  var hash = yield repo.readRef(ref);
-  var commit = yield repo.loadAs("commit", hash);
-  var tree = yield repo.loadAs("tree", commit.tree);
-  var entry = tree["README.md"];
-  yield* editor.loadNewFile(repo, {hash: entry.hash});
-
-  MASTER = {
-    ref,
-    hash,
-    commit,
-  }
-  HEAD = null;
-  ui_elements.branch_span.textContent = 'none';
-
-  yield* ckanFileBrowser.update(repo, MASTER.commit.tree)
-}
-ui_elements.close_active_project_button.onclick = ()=>run(readMaster);
-
-
-
-
-
 
 var author_object = run(github.getAuthorInformation)
 ui_elements.commit_button.onclick = function() {
   run(function*() {
-    if (!HEAD) {
+    if (!workspace.getActiveProject()) {
       log('curr branch isnt real, not commiting')
       return
     }
-    if (!editor_changed) {
+    if (!editor.isEditorChanged) {
       log('No changes in editor - not committing');
       return;
     }
 
-    var update = [
-      {
-        path: 'README.md',
-        mode: '100644',
-        content: ui_elements.textarea.value
-      }
-    ]
-    update.base = HEAD.commit.tree
+    content = yield* editor.getContentAsString()
+    github.saveFile(
+      workspace.getActiveProject(),
+      editor.getActiveFile().path,
+      content);
 
-    var treeHash = yield repo.createTree(update)
-
-    var commitHash = yield repo.saveAs(
-      "commit",
-      {
-        tree: treeHash,
-        parent: HEAD.hash,
-        author: author_object,
-        message: "automatic save"
-      }
-    );
-
-    yield repo.updateRef(HEAD.ref, commitHash)
-    load_branch(HEAD.ref)
+    workspace.loadProject(workspace.getActiveProject());
   })
 }
 
 ui_elements.update_master_button.onclick = function() {
-  run(function*() {
+  run(function*() {  // moveto github.js
     var upstream = externals.jsgit.connect_to_repo(
       githubUpstreamOrg+'/'+githubRepoName,
       githubToken);
@@ -146,10 +88,14 @@ var ckanFileBrowser = plugInUIckan(
   file => run(editor.loadNewFile(repo, file))
 );
 
-ui_elements.update_files_button.onclick = ()=> run(ckanFileBrowser.update(repo, HEAD.commit.tree));
 
-function on_project_loaded() {
-  ui_elements.update_files_button.onclick()
-}
+workspace.git_workspace_changed_hooks.push(function(head) {
+  run(ckanFileBrowser.update(repo, head.commit.tree));
+})
+workspace.project_loaded_hooks.push(function(project) {
+  ui_elements.branch_span.textContent = project ? project.name : 'none';
+})
+
+
 ui_elements.update_branches_button.onclick()
 ui_elements.close_active_project_button.onclick()

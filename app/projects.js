@@ -32,11 +32,10 @@ Project.prototype.get_mergebase = function*() {
 }
 
 
-var refname_base = 'refs/heads/'+refs_namespace+'/'
+var refname_base = 'heads/'+refs_namespace+'/'
 var refname_pr = refname_base + '__pr/'
-var refname_mb = 'refs/heads'+refs_namespace+'/__mergebase/'  // TODO remove.
 
-var refname_re = new RegExp(refname_base + '(__pr/|__mergebase/)?(.*)')
+var refname_re = new RegExp('refs/' + refname_base + '(__pr/)?(.*)')
 
 export function ref_to_project_name(ref) {
   var matches = ref.match(refname_re);
@@ -45,7 +44,7 @@ export function ref_to_project_name(ref) {
   return matches[2];
 }
 
-var ALL_PROJECTS = {}
+var ALL_PROJECTS = null; // TODO naming convntion.
 
 // Fetches all refs, builds projects db
 export function* update_all(repository) {
@@ -54,14 +53,16 @@ export function* update_all(repository) {
     repository.listRefs(refname_base),
     repository.listRefs(refname_pr),
   ];
+  if (!projects) projects = []
+  if (!prs) prs = []
 
-  for (let ref in projects) {
+  for (let ref of projects) {
     const name = ref_to_project_name(ref);
     if (!name) continue;
     all_projects[name] = new Project(repository, name, ref);
   }
 
-  for (let ref in prs) {
+  for (let ref of prs) {
     const name = ref_to_project_name(ref);
     project = all_projects[name];
     if (!project) continue; // TODO warn here.
@@ -71,6 +72,12 @@ export function* update_all(repository) {
 
   ALL_PROJECTS = all_projects;
   return ALL_PROJECTS;
+}
+
+export function* getAllProjects(repository) {
+  if (ALL_PROJECTS)
+    return ALL_PROJECTS;
+  return yield* update_all(repository);
 }
 
 

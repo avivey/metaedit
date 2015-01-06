@@ -6,7 +6,7 @@
   <script
     src="https://google.github.io/traceur-compiler/src/bootstrap.js"></script>
 
-  <script src="ext/load-nodejs-modules.min.js" ></script>
+  <script src="ext/nodejs-modules.min.js" ></script>
   <script src="ext/jsoneditor.min.js"></script>
 
   <script type="module" src="app/main.js"></script>
@@ -50,15 +50,17 @@ or maybe
 some
 </div>
 
-<div id="main"  class="mainarea" >
+<div id="main_pane"  class="mainarea" >
+</div>
+
+<div id="hidden" style="display: none">
+<h1>remove all this</h1>
   <h2>main work area</h2>
   Current project: <span id="current_branch">none</span>
   <button id="save_changes"></button>
   <span id="changes_marker">no changes</span>
   <div id="json_editor"></div>
   <textarea id="the_textarea" rows="25" cols="100"></textarea>
-
-
 </div>
 
 </body>

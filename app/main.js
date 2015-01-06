@@ -121,5 +121,17 @@ workspace.project_loaded_hooks.push(function(project) {
 })
 
 
-updateProjects();
-ui_elements.close_active_project_button.onclick()
+
+import AppManager from 'app/app-manager';
+var appManager = new AppManager(ui_elements.main_pane);
+
+var activeApplication
+import WelcomeApp from 'app/welcome';
+run(function*() {
+  var welcome = new WelcomeApp();
+  yield* appManager.loadApp(welcome);
+});
+log()
+
+// updateProjects();
+// ui_elements.close_active_project_button.onclick()

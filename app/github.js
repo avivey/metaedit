@@ -5,15 +5,34 @@
 import {log} from 'lib/debug';
 import * as network from 'lib/network';
 
-import {githubApiRoot} from 'app/config';
+import { githubApiRoot } from 'app/config';
 
 function unimpl() {
   throw new Error("Not implemented");
 }
 
+import { githubClientId, githubClientSecret } from 'app/config';
 export function* getToken(username, password) {
-  unimpl();
-  return null;
+  var body = {
+    note: 'metaedit app',
+    node_url: 'https://github.com/avivey/metaedit',
+    scopes: ['public_repo'],
+    client_secret: githubClientSecret,
+  };
+  body = JSON.stringify(body);
+  var options = {
+    method: 'PUT',
+    headers: [
+      ['Authorization', 'basic ' +  window.btoa(username + ":" + password)]
+    ]
+  };
+  var uri = githubApiRoot;
+  uri += 'authorizations/clients/';
+  uri += githubClientId
+  var response = yield network.request(uri, body, options);
+  response = JSON.parse(response);
+
+  return response.token;
 }
 
 export default class {
@@ -43,6 +62,7 @@ export default class {
       ],
       method: method
     }
+    body = JSON.stringify(body);
     var response = yield network.request(uri, body, options)
     return JSON.parse(response)
   }

@@ -38,3 +38,4 @@ Used and included libs:
 - https://github.com/jdorn/json-editor (MIT)
 - https://www.npmjs.com/package/json-stable-stringify (MIT)
 - https://github.com/substack/node-browserify (MIT)
+TODO: Note about security an oauth

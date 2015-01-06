@@ -34,19 +34,18 @@ export function* loadNewFile(repository, file) {
 
   active_file = file;
   json_editor.setValue(content);
-  editor_changed = false;
+  editor_changed = false; ui_elements.changes_marker_span.textContent = 'No changes';
 }
 
-export function* getContentAsString() {
+export function getContentAsString() {
   // Validate the editor's current value against the schema
   var errors = json_editor.validate();
-
   if (errors.length) {
     alert("Content isn't valid!");
     throw new Error("validation error");
   }
 
-  return externals.stringify(json_editor.getValue());
+  return externals.stringify(json_editor.getValue(), {space:4});
 }
 
 
@@ -58,7 +57,7 @@ externals.gen_run(function*() {
   }
 
   json_editor = new JSONEditor(ui_elements.json_editor, editor_options);
-  json_editor.on('change',()=> { editor_changed = true;})
+  json_editor.on('change',()=> { editor_changed = true; ui_elements.changes_marker_span.textContent = 'made changes'})
 });
 
 

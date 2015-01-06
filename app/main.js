@@ -16,9 +16,11 @@ import Github from 'app/github';
 var github = new Github(githubToken)
 
 import {ref_to_project_name, getAllProjects} from 'app/projects';
-import * as workspace from 'app/workspace';
+import Workspace from 'app/workspace';
 import * as projects from 'app/projects';
 import * as editor from 'app/ckan/editor';
+
+var workspace = new Workspace()
 
 ui_elements.update_branches_button.onclick = function() {
   run(function*() {
@@ -45,22 +47,27 @@ ui_elements.close_active_project_button.onclick = ()=> {
 
 ui_elements.commit_button.onclick = function() {
   run(function*() {
-    if (!workspace.getActiveProject()) {
-      log('curr branch isnt real, not commiting')
-      return
-    }
     if (!editor.isEditorChanged) {
       log('No changes in editor - not committing');
       return;
     }
 
-    content = yield* editor.getContentAsString()
-    github.saveFile(
-      workspace.getActiveProject(),
+    var head = workspace.gitHead;
+    var project = workspace.activeProject;
+    if (!project) {
+      var name = prompt("Enter name for new project:");
+      if (!name) return;
+      var project = projects.createNewProject(repo, name);
+    }
+    var content = editor.getContentAsString()
+    yield* github.saveFile(
+      project,
+      head,
       editor.getActiveFile().path,
       content);
 
-    workspace.loadProject(workspace.getActiveProject());
+    yield* workspace.loadProject(project);
+    ui_elements.update_branches_button.onclick()
   })
 }
 
@@ -93,7 +100,13 @@ workspace.git_workspace_changed_hooks.push(function(head) {
   run(ckanFileBrowser.update(repo, head.commit.tree));
 })
 workspace.project_loaded_hooks.push(function(project) {
-  ui_elements.branch_span.textContent = project ? project.name : 'none';
+  if (project) {
+    ui_elements.branch_span.textContent = project.name;
+    ui_elements.commit_button.textContent = 'Save';
+  } else {
+    ui_elements.branch_span.textContent = 'None';
+    ui_elements.commit_button.textContent = 'Save as new project';
+  }
 })
 
 

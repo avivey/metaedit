@@ -1,5 +1,5 @@
 "use strict";
-
+import {log} from 'lib/debug';
 import {refs_namespace} from 'app/config';
 
 // Project object is:
@@ -78,6 +78,19 @@ export function* getAllProjects(repository) {
   if (ALL_PROJECTS)
     return ALL_PROJECTS;
   return yield* update_all(repository);
+}
+
+var new_project_name_re = /^[a-z][a-z0-9_-]*$/i;
+export function createNewProject(repository, name) {
+  name = name.replace(' ', '_');
+  if (!name.match(new_project_name_re))
+    throw new Error("Name is inavlid");
+
+  var ref = 'refs/' + refname_base + name;
+
+  var project = new Project(repository, name, ref);
+  ALL_PROJECTS[name] = project;
+  return project;
 }
 
 

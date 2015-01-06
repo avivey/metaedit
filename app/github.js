@@ -46,39 +46,31 @@ export default class {
     var response = yield network.request(uri, body, options)
     return JSON.parse(response)
   }
-}
 
-  /* adds auth header, github api root
-  */
+  * saveFile(project, git_head, path, content, mode = '100644') {
+    var update = [{ path, mode, content }];
+    update.base = git_head.commit.tree;
+    var repository = project.repository;
 
-export function* saveFile(project, path, content, mode = '100644') {
+    var treeHash = yield repository.createTree(update);
 
-    var update = [
-      {
-        path: 'README.md',
-        mode: '100644',
-        content: ui_elements.textarea.value
-      }
-    ]
-    update.base = HEAD.commit.tree
-
-    var treeHash = yield repo.createTree(update)
-
-    var commitHash = yield repo.saveAs(
+    var commitHash = yield repository.saveAs(
       "commit",
       {
         tree: treeHash,
-        parent: HEAD.hash,
-        author: author_object,
+        parent: git_head.hash,
+        author: yield* this.getAuthorInformation(),
         message: "automatic save"
       }
     );
 
-    yield repo.updateRef(HEAD.ref, commitHash)
-    workspace.loadProject(workspace.getActiveProject());
+    yield repository.updateRef(project.ref, commitHash);
+  }
 }
-
 function squashChanges(base, workbranch, targetBranch) {
+
+// take tree from workbranch, make commit with that tree and
+// parent = base, udpate targetBranch to that commit.
 
 /*
     var update = [

@@ -22,7 +22,7 @@ import * as editor from 'app/ckan/editor';
 
 var workspace = new Workspace()
 
-ui_elements.update_branches_button.onclick = function() {
+function updateProjects() {
   run(function*() {
     var projectList = yield* projects.getAllProjects(repo);
 
@@ -40,6 +40,7 @@ ui_elements.update_branches_button.onclick = function() {
     }
   })
 }
+ui_elements.update_branches_button.onclick = updateProjects
 
 ui_elements.close_active_project_button.onclick = ()=> {
   run(workspace.loadProject(null, repo));
@@ -67,7 +68,7 @@ ui_elements.commit_button.onclick = function() {
       content);
 
     yield* workspace.loadProject(project);
-    ui_elements.update_branches_button.onclick()
+    updateProjects()
   })
 }
 
@@ -80,6 +81,16 @@ ui_elements.update_master_button.onclick = function() {
     var upstreamHash = yield upstream.readRef('refs/heads/master');
     yield repo.updateRef('refs/heads/master', upstreamHash);
   });
+}
+
+ui_elements.delete_project_button.onclick = function() {
+  run(function*() {
+    var project = workspace.activeProject;
+    if (project) {
+      yield* github.deleteBranch(project);
+      updateProjects();
+    }
+  })
 }
 
 import { plugInUI as plugInUIckan } from 'app/ckan/file_browser';
@@ -110,5 +121,5 @@ workspace.project_loaded_hooks.push(function(project) {
 })
 
 
-ui_elements.update_branches_button.onclick()
+updateProjects();
 ui_elements.close_active_project_button.onclick()

@@ -15,4 +15,5 @@ export var commit_button = q('save_changes');
 export var changes_marker_span = q('changes_marker');
 
 export var update_master_button = q('update_master');
+export var delete_project_button = q('delete_project');
 export var close_active_project_button = q('close_active_project');

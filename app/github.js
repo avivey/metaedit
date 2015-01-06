@@ -66,6 +66,11 @@ export default class {
 
     yield repository.updateRef(project.ref, commitHash);
   }
+
+  * deleteBranch(project) {
+    var repository = project.repository;
+    yield repository.deleteRef(project.ref);
+  }
 }
 function squashChanges(base, workbranch, targetBranch) {
 

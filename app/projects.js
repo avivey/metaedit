@@ -10,7 +10,7 @@ import {refs_namespace} from 'app/config';
     mergebase: hash of commit where branch was made (Basically merge-base).
     pullrequest: {
       uri: string, uri for the github pr object.  NOTE: May be missing
-      ref: string, full refname of the "from" branch for the pr.
+      ref: string, full refname of the "from" branch for the pr.  TODO
     }
   }
 
@@ -44,10 +44,8 @@ export function ref_to_project_name(ref) {
   return matches[2];
 }
 
-var ALL_PROJECTS = null; // TODO naming convntion.
-
-// Fetches all refs, builds projects db
-export function* update_all(repository) {
+// Fetches all refs
+export function* getAllProjects(repository) {
   var all_projects = {}
   var [projects, prs] = yield [
     repository.listRefs(refname_base),
@@ -70,14 +68,7 @@ export function* update_all(repository) {
     project.pullrequest = { ref }; // TODO find pr uri.
   }
 
-  ALL_PROJECTS = all_projects;
-  return ALL_PROJECTS;
-}
-
-export function* getAllProjects(repository) {
-  if (ALL_PROJECTS)
-    return ALL_PROJECTS;
-  return yield* update_all(repository);
+  return all_projects;
 }
 
 var new_project_name_re = /^[a-z][a-z0-9_-]*$/i;
@@ -89,7 +80,6 @@ export function createNewProject(repository, name) {
   var ref = 'refs/' + refname_base + name;
 
   var project = new Project(repository, name, ref);
-  ALL_PROJECTS[name] = project;
   return project;
 }
 

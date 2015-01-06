@@ -1,4 +1,4 @@
 - delete project button: check if PR is closed, warn otherwise.
-- auto update all/one project. blow up if conflict.
+- update project. blow up if conflict.
 - login flow
-- commit button: rename to "save" or "save new project", depending on state.
+- option to always autoupdate master.

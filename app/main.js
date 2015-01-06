@@ -12,7 +12,8 @@ import {log} from 'lib/debug';
 
 var run = externals.gen_run
 
-import * as github from 'app/github';
+import Github from 'app/github';
+var github = new Github(githubToken)
 
 import {ref_to_project_name, getAllProjects} from 'app/projects';
 import * as workspace from 'app/workspace';
@@ -42,7 +43,6 @@ ui_elements.close_active_project_button.onclick = ()=> {
   run(workspace.loadProject(null, repo));
 }
 
-var author_object = run(github.getAuthorInformation)
 ui_elements.commit_button.onclick = function() {
   run(function*() {
     if (!workspace.getActiveProject()) {

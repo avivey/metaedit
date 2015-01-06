@@ -51,7 +51,7 @@ export function* getContentAsString() {
 
 
 externals.gen_run(function*() {
-  var schema = yield* network.request('ext/CKAN.schema'); // TODO move this
+  var schema = yield network.request('ext/CKAN.schema'); // TODO move this
   var editor_options = {
     schema: JSON.parse(schema),
     disable_edit_json: true,

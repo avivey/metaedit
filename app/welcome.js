@@ -21,9 +21,16 @@ export default class {
     target_div.innerHTML = fragment;
     this.app_manager = app_manager;
 
-    q('login_state').textContent =
-      localStorage.metaedit_github_token ?
+    var logged_in = !!localStorage.metaedit_github_token
+    q('login_state').textContent = logged_in ?
         'Logged in!' : 'Not logged in';
+
+    if (! logged_in) {
+      q('login_form').hidden = false;
+    } else {
+      q('logout_form').hidden = false;
+      q('app_launcher').hidden = false;
+    }
 
     q('github_login').onclick = ()=>
       run(function*() {

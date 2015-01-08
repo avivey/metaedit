@@ -30,3 +30,30 @@ div.mainarea {
 details summary h3 {
   display: inline;
 }
+
+/* TODO another css file? */
+/* welcome related stuff */
+div.app_launcher_item {
+  overflow: auto;
+  margin: 2em;
+}
+div.app_launcher_item:hover {
+  background-color: lightyellow;
+}
+.app_launcher_item img{
+  float: left;
+  margin-right: 2em;
+}
+.app_launcher_item.body {
+  display: inline-block;
+}
+.app_launcher_item ul {
+  list-style-type: none;
+}
+.app_launcher_item li{
+  margin: 1em;
+}
+.app_launcher_item li.disabled{
+  color: lightgray;
+}
+

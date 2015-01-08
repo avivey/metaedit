@@ -2,7 +2,7 @@
  *
  */
 "use strict";
-import {log} from 'lib/debug';
+import {log} from 'lib/util';
 import * as network from 'lib/network';
 
 import { githubApiRoot } from 'app/config';

@@ -7,11 +7,7 @@ export var refs_namespace = 'metaedit';
 // Or you can use an oauth flow to get a token for the user.
 export var githubToken = localStorage['metaedit_github_token'];
 
-if (!githubToken) {
-  console.log("Missing github token! All is lost!");
-}
-
-export var githubUsername = 'avivey'
+export var githubUsername = 'avivey'  // TODO store this.
 
 export var githubRepoName = "CKAN-meta";
 export var githubUpstreamOrg = "KSP-CKAN"; // TODO can pull this?

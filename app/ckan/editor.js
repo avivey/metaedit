@@ -8,7 +8,7 @@
 
 // For now, keep using the textarea.
 import * as ui_elements from 'app/ui_setup'; // TODO this is obviously really bad.
-import {log} from 'lib/debug';
+import {log} from 'lib/util';
 
 
 import * as network from 'lib/network';

@@ -10,7 +10,7 @@
  explore way to start change before having project name.
 */
 
-import{log} from 'lib/debug'
+import{log} from 'lib/util'
 export default class {
   constructor() {
     this.activeProject = null;

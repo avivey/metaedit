@@ -1,5 +1,5 @@
 "use strict";
-import {log} from 'lib/debug';
+import {log} from 'lib/util';
 import {refs_namespace} from 'app/config';
 
 // Project object is:

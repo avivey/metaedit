@@ -10,6 +10,14 @@ Usage:
 - So you can actually browse stuff before you start editing.
 - You can update `master` with the upstream with a single click.
 
+Anti-patterns: (probably move to another txt file)
+--------------
+These are bad (explain why), so metaedit does not support them:
+- multi-file editor
+- multi-branch project
+- not squashing changes.
+
+
 Build / Develop:
 ----------------
 metaedit runs in a browser. It does need to be served over http(s), but requires

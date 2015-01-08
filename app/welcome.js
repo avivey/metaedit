@@ -6,7 +6,7 @@
  */
 
 
-import {log} from 'lib/debug'
+import {log, q, mkel} from 'lib/util';
 import * as network from 'lib/network';
 import { getToken } from 'app/github';
 
@@ -17,9 +17,9 @@ export default class {
   }
 
   * loadApp(target_div, sidebar_div, app_manager) {
+    this.app_manager = app_manager;
     var fragment = yield network.request('app/welcome.f.html');
     target_div.innerHTML = fragment;
-    this.app_manager = app_manager;
 
     var logged_in = !!localStorage.metaedit_github_token
     q('login_state').textContent = logged_in ?
@@ -39,22 +39,22 @@ export default class {
     launcher.innerHTML = '<h2>Select Application:</h2>'
     for (let app of app_manager.applications) {
       var info = app.applicationInformation;
-      var div = document.createElement('div');
-      div.className = 'app_launcher_item';
-      var img = document.createElement('img');
+
+      var img = mkel('img');
       img.src = info.avatar;
-      div.appendChild(img);
-      var body = document.createElement('div');
-      body.className = 'body';
-      body.innerHTML = '<h3>' + info.name + '</h3>' + info.description;
-      var ul = document.createElement('ul');
-      ul.innerHTML =
-        '<li class="disabled">Fork and Launch</li>' +
-        '<li >Launch</li>' +
-        '<li class="disabled">Update and Launch</li>';
-      body.appendChild(ul);
-      div.appendChild(body);
-      launcher.appendChild(div);
+
+      var body = mkel(
+        'div',
+        [ mkel('h3', info.name),
+          info.description,
+          mkel(
+            'ul',
+            '<li class="disabled">Fork and Launch</li>' +
+            '<li >Launch</li>' +
+            '<li class="disabled">Update and Launch</li>')],
+        'body');
+
+      launcher.appendChild(mkel('div', [img, body], 'app_launcher_item'));
     }
 
     launcher.hidden = false;
@@ -75,7 +75,4 @@ export default class {
 
   * destroyApp() {
   }
-
-
 }
-var q = document.getElementById.bind(document);

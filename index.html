@@ -16,48 +16,22 @@
 <body>
 <div id="navigation_bar">
 
-<div id="navigation_pane">
-<details open="true"><!-- TODO this doesn't work in ff or ie. use javascript. -->
-  <summary><h3>Projects:</h3></summary>
-  <ul id="project_list"></ul>
-  <button id="update_branches">update</button>
-  <button id="new_project" enabled="false">new project</button>
-</details>
-<details>
-  <summary><h3>Changed Files</h3></summary>
-</details>
-<details open="true" id="files_list_div">
-  <summary><h3 >Files</h3></summary>
-  <ul id="files_list_1"></ul>
-  <ul id="files_list_2"></ul>
-</details>
-</div>
+  <div id="navigation_pane"></div>
 
-<div id="global_actions">
-  <h3>Actions</h3>
-  <ul>
-  <li><button id="close_active_project">Close project</button></li>
-  <li><button id="delete_project">Delete project</button></li>
-  <li><button>Request Pull</button></li>
-  <li><button>Update Project</button></li>
-  <li><button id="update_master">Update master</button></li>
-  </ul>
-</div>
+  <div id="global_actions">
+    <h3>Actions</h3>
+    <ul>
+    <li><button id="close_active_project">Close project</button></li>
+    <li><button id="delete_project">Delete project</button></li>
+    <li><button>Request Pull</button></li>
+    <li><button>Update Project</button></li>
+    <li><button id="update_master">Update master</button></li>
+    </ul>
+  </div>
 </div>
 
 
-<div id="main_pane"  class="mainarea" >
-</div>
-
-<div id="hidden" style="display: none">
-<h1>remove all this</h1>
-  <h2>main work area</h2>
-  Current project: <span id="current_branch">none</span>
-  <button id="save_changes"></button>
-  <span id="changes_marker">no changes</span>
-  <div id="json_editor"></div>
-  <textarea id="the_textarea" rows="25" cols="100"></textarea>
-</div>
+<div id="main_pane"  class="mainarea"></div>
 
 </body>
 </html>

@@ -11,7 +11,7 @@ should maybe know if it's reading master or a project?
 */
 "use strict";
 
-import {log} from 'lib/debug';
+import {log} from 'lib/util';
 var run = externals.gen_run;
 
 // maye make this a "constuctor", because it returns an "object"?

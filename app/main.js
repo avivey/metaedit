@@ -8,7 +8,7 @@ var repo = externals.jsgit.connect_to_repo(githubUsername+'/'+githubRepoName, gi
 
 import * as ui_elements from 'app/ui_setup';
 
-import {log} from 'lib/debug';
+import {log, q, mkel} from 'lib/util';
 
 var run = externals.gen_run
 

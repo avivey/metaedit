@@ -19,4 +19,5 @@ export var delete_project_button = q('delete_project');
 export var close_active_project_button = q('close_active_project');
 
 export var main_pane = q('main_pane')
+export var navigation_pane = q('navigation_pane')
 

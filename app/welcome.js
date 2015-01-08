@@ -16,7 +16,7 @@ export default class {
   constructor() {
   }
 
-  * loadApp(target_div, app_manager) {
+  * loadApp(target_div, sidebar_div, app_manager) {
     var fragment = yield network.request('app/welcome.f.html');
     target_div.innerHTML = fragment;
     this.app_manager = app_manager;
@@ -27,11 +27,41 @@ export default class {
 
     if (! logged_in) {
       q('login_form').hidden = false;
+      yield* this.render_login();
     } else {
       q('logout_form').hidden = false;
-      q('app_launcher').hidden = false;
+      yield* this.render_menu(target_div, sidebar_div, app_manager);
+    }
+  }
+
+  * render_menu(target_div, sidebar_div, app_manager) {
+    var launcher = q('app_launcher');
+    launcher.innerHTML = '<h2>Select Application:</h2>'
+    for (let app of app_manager.applications) {
+      var info = app.applicationInformation;
+      var div = document.createElement('div');
+      div.className = 'app_launcher_item';
+      var img = document.createElement('img');
+      img.src = info.avatar;
+      div.appendChild(img);
+      var body = document.createElement('div');
+      body.className = 'body';
+      body.innerHTML = '<h3>' + info.name + '</h3>' + info.description;
+      var ul = document.createElement('ul');
+      ul.innerHTML =
+        '<li class="disabled">Fork and Launch</li>' +
+        '<li >Launch</li>' +
+        '<li class="disabled">Update and Launch</li>';
+      body.appendChild(ul);
+      div.appendChild(body);
+      launcher.appendChild(div);
     }
 
+    launcher.hidden = false;
+  }
+
+
+  * render_login() {
     q('github_login').onclick = ()=>
       run(function*() {
         var u = q('w_username').value;
@@ -42,9 +72,10 @@ export default class {
       });
   }
 
-  * destroyApp() {
 
+  * destroyApp() {
   }
+
 
 }
 var q = document.getElementById.bind(document);

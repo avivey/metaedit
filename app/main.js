@@ -109,7 +109,7 @@ var ckanFileBrowser = plugInUIckan(
 
 workspace.git_workspace_changed_hooks.push(function(head) {
   run(ckanFileBrowser.update(repo, head.commit.tree));
-})
+});
 workspace.project_loaded_hooks.push(function(project) {
   if (project) {
     ui_elements.branch_span.textContent = project.name;
@@ -118,20 +118,24 @@ workspace.project_loaded_hooks.push(function(project) {
     ui_elements.branch_span.textContent = 'None';
     ui_elements.commit_button.textContent = 'Save as new project';
   }
-})
-
+});
 
 
 import AppManager from 'app/app-manager';
-var appManager = new AppManager(ui_elements.main_pane);
+var appManager = new AppManager(
+  ui_elements.main_pane,
+  ui_elements.navigation_pane);
 
-var activeApplication
+import ckanApp from 'app/ckan/application';
+appManager.registerApplication(new ckanApp());
+appManager.registerApplication(new ckanApp());
+
 import WelcomeApp from 'app/welcome';
 run(function*() {
   var welcome = new WelcomeApp();
   yield* appManager.loadApp(welcome);
 });
-log()
+
 
 // updateProjects();
 // ui_elements.close_active_project_button.onclick()

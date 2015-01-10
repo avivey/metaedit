@@ -1,0 +1,54 @@
+Application dev guide
+=====================
+
+Interface:
+----------
+Application object:
+{
+  get applicationInformation():
+    Returns a map describing the application.
+    The map contains both human-readable content describing the app, and
+    variables used by the system to set-up the application (Fork and update the
+    relevant repo).
+
+  * loadApp(main_div, app_manager)
+  * destroyApp(app_manager)
+    Called by app manager to start and stop the application.
+}
+
+Editor object:
+{
+
+}
+
+Application Manager object:
+{
+  projects:
+    Manages "projects" (metaedit managed branches).
+
+  workspace:
+    The Workspace object is akin to the git working directory.
+    It provides bare file access.
+    Events:
+    - workspace changed (Akin to "git checkout")
+    - project loaded (A metaedit managed branched is checked-out)
+}
+
+Services:
+---------
+The framework provides these services:
+- Projects and Workspace objects (See Interfaces).
+- Project browser (UI)
+
+
+
+Global UI elements:
+-------------------
+
+These names represent DOM objects that are globally available for applications
+to use:
+
+- file_browser: Put your custom file browser here. Expected to hide actual
+  files with user-friendly name.
+
+-

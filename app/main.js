@@ -6,9 +6,8 @@ import {githubUsername, githubRepoName, githubUpstreamOrg, githubToken} from 'ap
 
 var repo = externals.jsgit.connect_to_repo(githubUsername+'/'+githubRepoName, githubToken);
 
-import * as ui_elements from 'app/ui_setup';
-
-import {log, q, mkel} from 'lib/util';
+import {log, TODO} from 'lib/util';
+import {q, mkel} from 'lib/util';
 
 var run = externals.gen_run
 
@@ -19,71 +18,28 @@ import {ref_to_project_name, getAllProjects} from 'app/projects';
 import Workspace from 'app/workspace';
 import * as projects from 'app/projects';
 import * as editor from 'app/ckan/editor';
+import ProjectsBrowser from 'app/projects_browser';
 
-var workspace = new Workspace()
+var workspace = new Workspace();
+var projectsBrowser = new ProjectsBrowser();
 
-function updateProjects() {
-  run(function*() {
-    var projectList = yield* projects.getAllProjects(repo);
+q('update_projects_btn').onclick = () => projectsBrowser.updateProjects()
 
-    var target = ui_elements.branch_list
-
-    target.innerHTML = ''
-    for (let name in projectList) {
-      let project = projectList[name];
-
-      var li = document.createElement("li");
-      li.className = "link_like";
-      li.innerHTML = name;
-      li.onclick = () => run(workspace.loadProject(project));
-      target.appendChild(li);
-    }
-  })
-}
-ui_elements.update_branches_button.onclick = updateProjects
-
-ui_elements.close_active_project_button.onclick = ()=> {
+q('close_active_project_btn').onclick = ()=> {
   run(workspace.loadProject(null, repo));
 }
 
-ui_elements.commit_button.onclick = function() {
+var tmp= function() {
   run(function*() {
-    if (!editor.isEditorChanged) {
-      log('No changes in editor - not committing');
-      return;
-    }
-
-    var head = workspace.gitHead;
-    var project = workspace.activeProject;
-    if (!project) {
-      var name = prompt("Enter name for new project:");
-      if (!name) return;
-      var project = projects.createNewProject(repo, name);
-    }
-    var content = editor.getContentAsString()
-    yield* github.saveFile(
-      project,
-      head,
-      editor.getActiveFile().path,
-      content);
-
-    yield* workspace.loadProject(project);
+    yield* workspace.saveChanges(editor);
     updateProjects()
   })
 }
-
-ui_elements.update_master_button.onclick = function() {
-  run(function*() {  // moveto github.js
-    var upstream = externals.jsgit.connect_to_repo(
-      githubUpstreamOrg+'/'+githubRepoName,
-      githubToken);
-
-    var upstreamHash = yield upstream.readRef('refs/heads/master');
-    yield repo.updateRef('refs/heads/master', upstreamHash);
-  });
+q('update_master_btn').onclick = function() {
+  run(github.updateMaster(TODO()));
 }
 
-ui_elements.delete_project_button.onclick = function() {
+q('delete_project_btn').onclick = function() {
   run(function*() {
     var project = workspace.activeProject;
     if (project) {
@@ -94,8 +50,7 @@ ui_elements.delete_project_button.onclick = function() {
 }
 
 import { plugInUI as plugInUIckan } from 'app/ckan/file_browser';
-
-function TODO(a=undefined) {}
+var ui_elements = TODO()
 
 var ckanFileBrowser = plugInUIckan(
   repo,
@@ -107,10 +62,10 @@ var ckanFileBrowser = plugInUIckan(
 );
 
 
-workspace.git_workspace_changed_hooks.push(function(head) {
+workspace.git_workspace_changed_hooks['main.js'] = function(head) {
   run(ckanFileBrowser.update(repo, head.commit.tree));
-});
-workspace.project_loaded_hooks.push(function(project) {
+};
+workspace.project_loaded_hooks['main.js'] = function(project) {
   if (project) {
     ui_elements.branch_span.textContent = project.name;
     ui_elements.commit_button.textContent = 'Save';
@@ -118,13 +73,11 @@ workspace.project_loaded_hooks.push(function(project) {
     ui_elements.branch_span.textContent = 'None';
     ui_elements.commit_button.textContent = 'Save as new project';
   }
-});
+};
 
 
 import AppManager from 'app/app-manager';
-var appManager = new AppManager(
-  ui_elements.main_pane,
-  ui_elements.navigation_pane);
+var appManager = new AppManager(q('main_pane'), projects, workspace);
 
 import ckanApp from 'app/ckan/application';
 appManager.registerApplication(new ckanApp());

@@ -2,7 +2,7 @@
  *
  */
 "use strict";
-import {log} from 'lib/util';
+import {log, TODO} from 'lib/util';
 import * as network from 'lib/network';
 
 import { githubApiRoot } from 'app/config';
@@ -90,6 +90,18 @@ export default class {
   * deleteBranch(project) {
     var repository = project.repository;
     yield repository.deleteRef(project.ref);
+  }
+
+  * updateMaster(application, repository= TODO()) {
+   var githubUpstreamOrg = TODO();
+   var githubRepoName= TODO();
+
+   var upstream = externals.jsgit.connect_to_repo(
+      githubUpstreamOrg+'/'+githubRepoName,
+      this.githubToken);
+
+    var upstreamHash = yield upstream.readRef('refs/heads/master');
+    yield repository.updateRef('refs/heads/master', upstreamHash);
   }
 }
 function squashChanges(base, workbranch, targetBranch) {

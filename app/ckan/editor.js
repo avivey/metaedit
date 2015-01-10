@@ -6,9 +6,7 @@
   create + format json file
 */
 
-// For now, keep using the textarea.
-import * as ui_elements from 'app/ui_setup'; // TODO this is obviously really bad.
-import {log} from 'lib/util';
+import {log, q, mkel} from 'lib/util';
 
 
 import * as network from 'lib/network';
@@ -28,13 +26,13 @@ export function* loadNewFile(repository, file) {
     content = JSON.parse(content);
   } catch (err) {
     alert("Failed to read file as JSON: "+ file.name);
-    ui_elements.textarea.value = content;
+    log(content);
     return;
   }
 
   active_file = file;
   json_editor.setValue(content);
-  editor_changed = false; ui_elements.changes_marker_span.textContent = 'No changes';
+  editor_changed = false; q('changes_marker_span').textContent = 'No changes';
 }
 
 export function getContentAsString() {
@@ -56,10 +54,10 @@ externals.gen_run(function*() {
     disable_edit_json: true,
   }
 
-  json_editor = new JSONEditor(ui_elements.json_editor, editor_options);
-  json_editor.on('change',()=> { editor_changed = true; ui_elements.changes_marker_span.textContent = 'made changes'})
+  json_editor = new JSONEditor(q('json_editor'), editor_options);
+  json_editor.on(
+    'change',
+    ()=> {
+      editor_changed = true; q('changes_marker_span').textContent = 'made changes'
+    });
 });
-
-
-
-

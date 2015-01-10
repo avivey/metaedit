@@ -10,20 +10,20 @@
  explore way to start change before having project name.
 */
 
-import{log} from 'lib/util'
+import{log, q, TODO} from 'lib/util'
 export default class {
   constructor() {
     this.activeProject = null;
     this._git_head = null;
 
-    this.git_workspace_changed_hooks = [];
-    this.project_loaded_hooks = []
+    this.git_workspace_changed_hooks = {};
+    this.project_loaded_hooks = {}
   }
 
   set gitHead(new_head) {
     this._git_head = new_head;
-    for (var f of this.git_workspace_changed_hooks)
-      f(new_head);
+    for (var k of this.git_workspace_changed_hooks)
+      this.git_workspace_changed_hooks[k](new_head);
   }
   get gitHead() { return this._git_head; }
 
@@ -37,7 +37,32 @@ export default class {
     this.activeProject = project;
     this.gitHead = { ref, hash, commit }
 
-   for (var f of this.project_loaded_hooks)
-      f(project);
+   for (var k in this.project_loaded_hooks)
+      this.project_loaded_hooks[k](project);
+  }
+
+  * saveChanges(editor) {
+    if (!editor.isEditorChanged) {
+      log('No changes in editor - not committing');
+      return;
+    }
+
+    var head = this.gitHead;
+    var project = this.activeProject;
+    if (!project) {
+      var projects = TODO();
+      var name = editor.suggestProjectName();
+      name = name || prompt("Enter name for new project:");
+      if (!name) return;
+      var project = projects.createNewProject(repo, name);
+    }
+    var content = editor.getContentAsString()
+    yield* github.saveFile(
+      project,
+      head,
+      editor.getActiveFile().path,
+      content);
+
+    yield* this.loadProject(project);
   }
 }

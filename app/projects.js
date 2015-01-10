@@ -20,6 +20,8 @@ import {refs_namespace} from 'app/config';
   abstraction for "branch".
 */
 
+// TODO export as a class
+
 function Project(repository, name, ref) {
   this.repository = repository;
   this.name = name;

@@ -16,7 +16,7 @@ export default class {
   constructor() {
   }
 
-  * loadApp(target_div, sidebar_div, app_manager) {
+  * loadApp(target_div, app_manager) {
     this.app_manager = app_manager;
     var fragment = yield network.request('app/welcome.f.html');
     target_div.innerHTML = fragment;
@@ -30,11 +30,11 @@ export default class {
       yield* this.render_login();
     } else {
       q('logout_form').hidden = false;
-      yield* this.render_menu(target_div, sidebar_div, app_manager);
+      yield* this.render_menu(target_div, app_manager);
     }
   }
 
-  * render_menu(target_div, sidebar_div, app_manager) {
+  * render_menu(target_div, app_manager) {
     var launcher = q('app_launcher');
     launcher.innerHTML = '<h2>Select Application:</h2>'
     for (let app of app_manager.applications) {

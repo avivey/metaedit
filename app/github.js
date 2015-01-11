@@ -128,33 +128,43 @@ export default class {
     repo.githubRepoName = repo_name;
     return repo;
   }
-}
-function squashChanges(base, workbranch, targetBranch) {
 
-// take tree from workbranch, make commit with that tree and
-// parent = base, udpate targetBranch to that commit.
+  * readRef(repository, ref) {
+    var hash = yield repository.readRef(ref);
+    var commit = yield repository.loadAs("commit", hash);
+    return {ref, hash, commit};
+  }
 
-/*
-    var update = [
-      {
-        path: 'README.md',
-        mode: '100644',
-        content: ui_elements.textarea.value
-      }
-    ]
-    update.base = HEAD.commit.tree
+  * squashChanges(repository, base, workbranch, targetBranch, commitMessage) {
+    var [base_hash, work_hash] = yield [
+      repository.readRef(base),
+      repository.readRef(workbranch),
+    ];
+    var work_commit = yield repository.loadAs("commit", work_hash);
 
-    var treeHash = yield repo.createTree(update)
-
-    var commitHash = yield repo.saveAs(
+    var commitHash = yield repository.saveAs(
       "commit",
       {
-        tree: treeHash,
-        parent: HEAD.hash,
-        author: author_object,
-        message: "automatic save"
+        tree: work_commit.tree,
+        parent: base_hash,
+        author: yield* this.getAuthorInformation(),
+        message: commitMessage,
       }
     );
 
-    yield repo.updateRef(HEAD.ref, commitHash)*/
+    yield repository.updateRef(targetBranch, commitHash); // todo force?
+  }
+
+  * createPullRequst(where, what, title, body  ) {
+    var uri = `repos/${where}/pulls`;
+    var body = {
+      title,
+      body,
+      head: what,
+      base: 'master',
+    }
+    var response = yield* this.apiRequest(uri, body, 'POST');
+    log(response);
+    return response.html_url;
+  }
 }

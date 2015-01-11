@@ -95,6 +95,29 @@ export default class {
 
     yield* this.loadProject(project);
   }
+
+  * createPullRequst(upstreamRepoName) { // TODO better arguments
+    var project = this.activeProject;
+    // get title + description
+    var title = prompt("Please provide title for this PR:", project.name);
+    var body = prompt("Please explain this PR:");
+
+    yield* this.__github.squashChanges(
+      project.repository,
+      'refs/heads/master',
+      project.ref,
+      project.pullrequest.ref,
+      title + '\n\n' + body);
+
+    // make pr from that.
+    var pr = yield* this.__github.createPullRequst(
+      upstreamRepoName,
+      project.pullrequest.ref,
+      title,
+      body);
+log(pr)
+    alert(`see it on gh: ${pr}`);
+  }
 }
 
 function invokeHooks(hookMap, ...args) {

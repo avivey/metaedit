@@ -49,6 +49,9 @@ export default class {
           files);
       });
     }
+    q('make_pr').onclick = () => {
+      run(app_manager.workspace.createPullRequst('KSP-CKAN/CKAN-meta'))
+    }
   }
 
   * destroyApp(app_manager) {

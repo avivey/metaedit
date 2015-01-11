@@ -7,7 +7,6 @@ import {refs_namespace} from 'app/config';
   {
     name: string. project name, main part of branch name.
     ref: string. Full refname of branch.
-    mergebase: hash of commit where branch was made (Basically merge-base).
     pullrequest: {
       uri: string, uri for the github pr object.  NOTE: May be missing
       ref: string, full refname of the "from" branch for the pr.  TODO
@@ -28,11 +27,15 @@ class Project{
     this.repository = repository;
     this.name = name;
     this.ref = ref;
+    this.__pr = null;
   }
-  * get_mergebase() {
-  // repository.readRef rename_mb+this.name
-  // or use https://developer.github.com/v3/repos/commits/#compare-two-commits
-  return null;
+
+  set pullrequest(pr) { this.__pr = pr; }
+  get pullrequest() {
+    if (this.__pr) return this.__pr;
+    return {
+      ref: 'refs/'+ refname_pr + this.name
+    }
   }
 }
 

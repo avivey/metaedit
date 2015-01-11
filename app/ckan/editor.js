@@ -79,7 +79,7 @@ export default class {
     if (name == this.activeFile.name) return;
     this.activeFile = {
       name,
-      path: this.activeFile.name.replace(this.activeFile.name, name)
+      path: this.activeFile.path.replace(this.activeFile.name, name)
     }
   }
 

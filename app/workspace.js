@@ -54,6 +54,22 @@ export default class {
     return {ref, hash, commit};
   }
 
+  // git diff --name-only HEAD master
+  * listChangedFiles() {
+    if (!this.activeProject) return [];
+
+    var diff = yield* this.__github.compareBranches(
+      this.repository,
+      'master',
+      this.activeProject.ref)
+    return diff.files.map(file => {
+      return {
+        path: file.filename,
+        name: file.filename,
+      }
+    });
+  }
+
   * saveChanges(editor) {
     if (!editor.isEditorChanged()) {
       log('No changes in editor - not committing');

@@ -5,7 +5,7 @@
 import {githubToken} from 'app/config';
 
 import {log, TODO} from 'lib/util';
-import {q, mkel} from 'lib/util';
+import {q, clearElement, mkel} from 'lib/util';
 
 var run = externals.gen_run
 
@@ -29,11 +29,22 @@ workspace.git_workspace_changed_hooks['project_browser']= () => {
   run(projectsBrowser.updateProjects());
 }
 
-var repo = TODO("this shouldn't exist at this level");
-q('close_active_project_btn').onclick = ()=> {
-  run(workspace.loadProject(null, repo));
-}
 
+workspace.git_workspace_changed_hooks['changed_files'] = () => {
+  // TODO changed_files section needs to be transformed via file_browser.
+  run(function*() {
+    var files = yield* workspace.listChangedFiles();
+    var frag = document.createDocumentFragment();
+    for (let file of files) {
+      var li = mkel('li', file.name, 'link_like');
+      // li.onclick = () => load_file_event(file);
+      frag.appendChild(li);
+    }
+    var target = q('changed_files_list');
+    clearElement(target);
+    target.appendChild(frag);
+  });
+}
 
 var tmp= function() {
   run(function*() {

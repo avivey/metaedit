@@ -22,7 +22,7 @@ div.mainarea {
   display: block;
 }
 
-#files_list_div {
+details {
   max-height: 35em;
   overflow-x: hidden;
 }

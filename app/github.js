@@ -115,9 +115,18 @@ export default class {
     yield repository.updateRef('refs/heads/master', upstreamHash);
   }
 
+  * compareBranches(repository, left, right) {
+    // Github's api looks like it should be symmetrical diff ("a...b"), but it
+    // really just "a..b".
+    var uri = `repos/${repository.githubRepoName}/compare/${left}...${right}`;
+    return yield* this.apiRequest(uri);
+  }
+
   loadRepository(repo_name) {
     // TODO if repo_name doesn't contain '/'{ repo_name=username+'/'+repo_name}
-    return externals.jsgit.connect_to_repo(repo_name, this.token);
+    var repo = externals.jsgit.connect_to_repo(repo_name, this.token);
+    repo.githubRepoName = repo_name;
+    return repo;
   }
 }
 function squashChanges(base, workbranch, targetBranch) {

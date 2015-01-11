@@ -25,6 +25,7 @@ export default class {
     q('login_state').textContent = logged_in ?
         'Logged in!' : 'Not logged in';
 
+    q('navigation_bar').hidden = true;
     if (! logged_in) {
       q('login_form').hidden = false;
       yield* this.render_login();
@@ -79,6 +80,7 @@ export default class {
 
 
   * destroyApp() {
+    q('navigation_bar').hidden = false;
   }
 
   get editor() { return TODO(); }

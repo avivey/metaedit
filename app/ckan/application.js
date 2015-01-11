@@ -1,11 +1,3 @@
-/* TODO
- *
- * Features:
- * -
- * -
- */
-
-
 import {log, q, mkel} from 'lib/util';
 import * as network from 'lib/network';
 import * as file_browser from 'app/ckan/file_browser'; // TODO
@@ -31,7 +23,8 @@ export default class {
     this.__file_browser = file_browser.plugInUI(
       q('files_list_1'),
       q('files_list_2'),
-      file => run(this.editor.loadNewFile(repo, file))
+      file =>
+        run(this.editor.loadNewFile(app_manager.workspace.repository, file))
     );
   }
 
@@ -47,7 +40,7 @@ export default class {
   }
 
   updateFileBrowser(repository, git_head) {
-    this.__file_browser.update(repository, git_head.commit.tree);
+    run(this.__file_browser.update(repository, git_head.commit.tree));
   }
 
   get editor() {
@@ -64,20 +57,3 @@ export default class {
     }
   }
 }
-
-// var branch_list = q('project_list');
-// var update_branches_button = q('update_branches');
-
-// var files_list_1 = q('files_list_1');
-// var files_list_2 = q('files_list_2');
-
-// var json_editor = q('json_editor');
-// var branch_span = q('current_branch');
-// var commit_button = q('save_changes');
-// var changes_marker_span = q('changes_marker');
-
-// var update_master_button = q('update_master');
-// var delete_project_button = q('delete_project');
-// var close_active_project_button = q('close_active_project');
-
-

@@ -21,7 +21,10 @@ var workspace = new Workspace();
 var projectsBrowser = new ProjectsBrowser(workspace);
 
 q('update_projects_btn').onclick = () => {
-  run(projectsBrowser.updateProjects(workspace.repository));
+  run(projectsBrowser.updateProjects());
+}
+workspace.git_repository_changed_hooks['project_browser']= () => {
+  run(projectsBrowser.updateProjects());
 }
 
 var repo = TODO("this shouldn't exist at this level");

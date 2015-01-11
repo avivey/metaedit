@@ -46,3 +46,4 @@ Used and included libs:
 - https://github.com/jdorn/json-editor (MIT)
 - https://www.npmjs.com/package/json-stable-stringify (MIT)
 - https://github.com/substack/node-browserify (MIT)
+- https://github.com/google/traceur-compiler (Apache license)

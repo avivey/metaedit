@@ -15,12 +15,14 @@ export default class {
     var self = this;
     externals.gen_run(function*() {
       var schema = yield network.request('ext/CKAN.schema'); // TODO move this
-      self.json_editor = makeJsonEditor(schema);
+      self.json_editor = self.makeJsonEditor(schema);
     });
     this.editor_changed = false;
     this.active_file = null;
   }
-  isEditorChanged() { return this.editor_changed; }
+  isEditorChanged() {
+    return this.json_editor.getValue() != this.__original_value;
+  }
   getActiveFile() { return this.active_file; }
 
   // TODO define "file" object.
@@ -36,9 +38,11 @@ export default class {
       return;
     }
 
-    active_file = file;
+    this.active_file = file;
+    this.__original_value = content;
     this.json_editor.setValue(content);
-    this.editor_changed = false; q('changes_marker_span').textContent = 'No changes';
+    this.editor_changed = false;
+    q('changes_marker_span').textContent = 'No changes'; // TODO delay this
   }
 
   getContentAsString() {
@@ -60,20 +64,19 @@ export default class {
     return null;
   }
 
-}
+  makeJsonEditor(schema) {
+    var editor_options = {
+      schema: JSON.parse(schema),
+      disable_edit_json: true,
+    }
 
-function makeJsonEditor(schema) {
-  var editor_options = {
-    schema: JSON.parse(schema),
-    disable_edit_json: true,
+    var json_editor = new JSONEditor(q('json_editor'), editor_options);
+    json_editor.on(
+      'change',
+      ()=> {
+        this.editor_changed = true;
+        q('changes_marker_span').textContent = 'made changes';
+      });
+    return json_editor;
   }
-
-  var json_editor = new JSONEditor(q('json_editor'), editor_options);
-  json_editor.on(
-    'change',
-    ()=> {
-      TODO().editor_changed = true;
-      q('changes_marker_span').textContent = 'made changes';
-    });
-  return json_editor;
 }

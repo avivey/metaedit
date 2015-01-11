@@ -23,7 +23,7 @@ export default class {
 
   * loadApp(app_object) {
     if (this.active_application)
-      this.active_application.destroyApp();
+      yield* this.active_application.destroyApp();
     this.__main.innerHTML = '';
 
     if (!app_object.bypass_all_app_manager) {
@@ -47,5 +47,4 @@ export default class {
       return null;
     return this.active_application.editor;
   }
-
 }

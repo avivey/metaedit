@@ -68,7 +68,7 @@ export default class {
     yield* this.__github.saveFile(
       project,
       head,
-      editor.getActiveFile().path,
+      editor.activeFile.path,
       content);
 
     yield* this.loadProject(project);

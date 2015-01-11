@@ -18,12 +18,17 @@ export default class {
       self.json_editor = self.makeJsonEditor(schema);
     });
     this.editor_changed = false;
-    this.active_file = null;
+    this.__activeFile = null;
   }
   isEditorChanged() {
     return this.json_editor.getValue() != this.__original_value;
   }
-  getActiveFile() { return this.active_file; }
+
+  get activeFile() { return this.__activeFile; }
+  set activeFile(file) {
+    this.__activeFile = file;
+    q('current_filename').innerHTML = file ? file.name : '<i>none</i>';
+  }
 
   // TODO define "file" object.
   * loadNewFile(repository, file) {
@@ -38,13 +43,14 @@ export default class {
       return;
     }
 
-    this.active_file = file;
+    this.activeFile = file;
     this.__original_value = content;
     this.json_editor.setValue(content);
     this.editor_changed = false;
     q('changes_marker_span').textContent = 'No changes'; // TODO delay this
 
     q('save_as_btn').onclick = () => this.createNewVersion();
+    q('close_file').onclick = () => { this.activeFile = null };
   }
 
   getContentAsString() {
@@ -63,17 +69,17 @@ export default class {
   }
 
   suggestProjectName() {
-    return this.active_file.name;
+    return this.activeFile.name;
   }
 
   createNewVersion() {
     // TODO replace with something smarter.
-    if (!this.active_file) return;
-    var name = prompt('new filename?', this.active_file.name);
-    if (name == this.active_file.name) return;
-    this.active_file = {
+    if (!this.activeFile) return;
+    var name = prompt('new filename?', this.activeFile.name);
+    if (name == this.activeFile.name) return;
+    this.activeFile = {
       name,
-      path: this.active_file.name.replace(this.active_file.name, name)
+      path: this.activeFile.name.replace(this.activeFile.name, name)
     }
   }
 

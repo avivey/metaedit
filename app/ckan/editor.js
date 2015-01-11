@@ -27,7 +27,14 @@ export default class {
   get activeFile() { return this.__activeFile; }
   set activeFile(file) {
     this.__activeFile = file;
-    q('current_filename').innerHTML = file ? file.name : '<i>none</i>';
+    var target = q('current_filename');
+    if (file) {
+      target.innerHTML = file.name;
+      target.title = file.path;
+    } else {
+      target.innerHTML = '<i>none</i>';
+      target.title = null;
+    }
   }
 
   // TODO define "file" object.

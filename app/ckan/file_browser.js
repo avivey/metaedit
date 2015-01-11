@@ -55,6 +55,7 @@ export function plugInUI( // TODO nothing here is really ok.
     var files = yield* listFilesForMod(repository, hash, mod.path);
     for (let file of files) {
       var li = mkel('li', version(file.name), 'link_like');
+      li.title = file.path;
       li.onclick = () => load_file_event(file);
       frag.appendChild(li);
     }

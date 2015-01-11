@@ -47,3 +47,4 @@ Used and included libs:
 - https://www.npmjs.com/package/json-stable-stringify (MIT)
 - https://github.com/substack/node-browserify (MIT)
 - https://github.com/google/traceur-compiler (Apache license)
+- Favicon is from http://tango.freedesktop.org/

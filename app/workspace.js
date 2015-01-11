@@ -65,7 +65,7 @@ export default class {
     return diff.files.map(file => {
       return {
         path: file.filename,
-        name: file.filename, // TODO
+        name: file.filename.substring(file.filename.lastIndexOf('/') + 1),
         hash: file.sha,
       }
     });

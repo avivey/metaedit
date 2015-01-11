@@ -41,8 +41,7 @@ export function plugInUI( // TODO nothing here is really ok.
 
     backToFileList();
   }
-    q('back_btn').onclick = backToFileList; // TODO only once.
-
+  q('back_btn').onclick = backToFileList; // TODO only once.
 
   function* displayFilesForMod(repository, hash, mod) {
     const target = level_2_list;
@@ -65,6 +64,19 @@ export function plugInUI( // TODO nothing here is really ok.
     top_level_list.hidden = true;
   }
 
+  // this is for "changed files". This file is already evil, so what's one more.
+  function displayFromFlatFilesList(target_elment, files) {
+    clearElement(target_elment);
+    var frag = document.createDocumentFragment();
+    for (let file of files) {
+      var li = mkel('li', file.name, 'link_like');
+      li.title = file.path;
+      li.onclick = () => load_file_event(file);
+      frag.appendChild(li);
+    }
+    target_elment.appendChild(frag);
+  }
+
   function backToFileList() {
     top_level_list.hidden = false;
     q('files_list_2_group').hidden = true;
@@ -72,7 +84,8 @@ export function plugInUI( // TODO nothing here is really ok.
   }
 
   return {
-    update // TODO updateRoot? also document.
+    update, // TODO updateRoot? also document.
+    displayFromFlatFilesList,
   }
 }
 
@@ -113,8 +126,12 @@ export function* listFilesForMod(repository, tree_hash, path) {
 }
 
 // Only accept filenames that have exactly one dash in them.
-var version_re = /^[^-]*-([^-]*)\.ckan$/;
+var full_filename_re = /^([^-]*)-([^-]*)\.ckan$/;
 function version(filename) {
-  var match = filename.match(version_re);
-  return match ? match[1] : filename
+  var match = filename.match(full_filename_re);
+  return match ? match[2] : filename;
+}
+function mod(filename) {
+  var match = filename.match(full_filename_re);
+  return match ? match[1] : '';
 }

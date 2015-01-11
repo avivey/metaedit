@@ -52,8 +52,8 @@ div.app_launcher_item:hover {
 }
 .app_launcher_item li{
   margin: 1em;
+  font-size: larger;
 }
 .app_launcher_item li.disabled{
   color: lightgray;
 }
-

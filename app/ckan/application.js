@@ -40,12 +40,22 @@ export default class {
         null,
         app_manager.workspace.repository));
     }
+    var __file_browser = this.__file_browser;
+    app_manager.workspace.git_workspace_changed_hooks['changed_files'] = () => {
+      run(function*() {
+        var files = yield* app_manager.workspace.listChangedFiles();
+        __file_browser.displayFromFlatFilesList(
+          q('changed_files_list'),
+          files);
+      });
+    }
   }
 
   * destroyApp(app_manager) {
     yield* this.__editor.destroy();
 
     delete app_manager.workspace.git_workspace_changed_hooks['ckan']
+    delete app_manager.workspace.git_workspace_changed_hooks['changed_files']
     this.__editor = null;
   }
 

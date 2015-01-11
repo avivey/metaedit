@@ -23,7 +23,9 @@ var projectsBrowser = new ProjectsBrowser(workspace);
 q('update_projects_btn').onclick = () => {
   run(projectsBrowser.updateProjects());
 }
-workspace.git_repository_changed_hooks['project_browser']= () => {
+workspace.git_workspace_changed_hooks['project_browser']= () => {
+  // This also updates the projects list whenever we checkout something, but
+  // it does so asynchronously.
   run(projectsBrowser.updateProjects());
 }
 

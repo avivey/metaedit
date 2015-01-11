@@ -1,5 +1,5 @@
 
-import {log, q, mkel} from 'lib/util'
+import {log, q, clearElement, mkel} from 'lib/util'
 var run = externals.gen_run;
 import * as projects from 'app/projects';
 
@@ -13,7 +13,7 @@ export default class {
       yield* projects.getAllProjects(this.workspace.repository);
     var target = q('project_list');
 
-    target.innerHTML = ''
+    clearElement(target);
     for (let name in projectList) {
       let project = projectList[name];
 

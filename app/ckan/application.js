@@ -18,6 +18,11 @@ export default class {
 
     app_manager.workspace.git_workspace_changed_hooks['ckan'] =
       this.updateFileBrowser.bind(this);
+    app_manager.workspace.project_loaded_hooks['ckan'] = (project) => {
+      q('current_project').innerHTML = project ? project.name : '<i>none</i>';
+    }
+
+
     this.__editor = new Editor();
     q('save_changes').onclick = () => {
       run(app_manager.workspace.saveChanges(this.__editor));

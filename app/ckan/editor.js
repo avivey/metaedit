@@ -69,7 +69,7 @@ export default class {
   }
 
   suggestProjectName() {
-    return this.activeFile.name;
+    return this.activeFile? this.activeFile.name : null;
   }
 
   createNewVersion() {
@@ -92,7 +92,7 @@ export default class {
     var json_editor = new JSONEditor(q('json_editor'), editor_options);
     json_editor.on(
       'change',
-      ()=> {
+      () =>  {
         this.editor_changed = true;
         q('changes_marker_span').textContent = 'made changes';
       });

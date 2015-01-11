@@ -22,17 +22,18 @@ import {refs_namespace} from 'app/config';
 
 // TODO export as a class
 
-function Project(repository, name, ref) {
-  this.repository = repository;
-  this.name = name;
-  this.ref = ref;
-}
-Project.prototype.get_mergebase = function*() {
+class Project{
+  constructor(repository, name, ref) {
+    this.repository = repository;
+    this.name = name;
+    this.ref = ref;
+  }
+  * get_mergebase() {
   // repository.readRef rename_mb+this.name
   // or use https://developer.github.com/v3/repos/commits/#compare-two-commits
   return null;
+  }
 }
-
 
 var refname_base = 'heads/'+refs_namespace+'/'
 var refname_pr = refname_base + '__pr/'

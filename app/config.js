@@ -9,9 +9,6 @@ export var githubToken = localStorage['metaedit_github_token'];
 
 export var githubUsername = 'avivey'  // TODO store this.
 
-export var githubRepoName = "CKAN-meta";
-export var githubUpstreamOrg = "KSP-CKAN"; // TODO can pull this?
-
 // for github ent, something like 'https://github.example.com/api/v3/'
 export var githubApiRoot = 'https://api.github.com/';
 

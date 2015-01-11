@@ -41,8 +41,8 @@ export default class {
     this.editor_changed = false; q('changes_marker_span').textContent = 'No changes';
   }
 
-    getContentAsString() {
-    // Validate the editor's current value against the schema
+  getContentAsString() {
+    // Validates the editor's current value against the schema
     var errors = this.json_editor.validate();
     if (errors.length) {
       alert("Content isn't valid!");
@@ -54,6 +54,10 @@ export default class {
 
   * destroy() {
     this.json_editor.destroy();
+  }
+
+  suggestProjectName() {
+    return null;
   }
 
 }

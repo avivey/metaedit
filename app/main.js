@@ -2,9 +2,7 @@
 
 // TODO just about nothing should actually stay in this file.
 
-import {githubUsername, githubRepoName, githubUpstreamOrg, githubToken} from 'app/config';
-
-var repo = externals.jsgit.connect_to_repo(githubUsername+'/'+githubRepoName, githubToken);
+import {githubToken} from 'app/config';
 
 import {log, TODO} from 'lib/util';
 import {q, mkel} from 'lib/util';
@@ -20,10 +18,13 @@ import * as projects from 'app/projects';
 import ProjectsBrowser from 'app/projects_browser';
 
 var workspace = new Workspace();
-var projectsBrowser = new ProjectsBrowser();
+var projectsBrowser = new ProjectsBrowser(workspace);
 
-q('update_projects_btn').onclick = () => projectsBrowser.updateProjects()
+q('update_projects_btn').onclick = () => {
+  run(projectsBrowser.updateProjects(workspace.repository));
+}
 
+var repo = TODO("this shouldn't exist at this level");
 q('close_active_project_btn').onclick = ()=> {
   run(workspace.loadProject(null, repo));
 }
@@ -40,7 +41,7 @@ q('update_master_btn').onclick = function() {
 }
 
 q('delete_project_btn').onclick = function() {
-  run(function*() {
+  run(function*() { // move to projects/projects_browser.
     var project = workspace.activeProject;
     if (project) {
       yield* github.deleteBranch(project);
@@ -49,35 +50,8 @@ q('delete_project_btn').onclick = function() {
   })
 }
 
-import { plugInUI as plugInUIckan } from 'app/ckan/file_browser';
-var ui_elements = TODO()
-
-var ckanFileBrowser = plugInUIckan(
-  repo,
-
-  ui_elements.files_list_1,
-  ui_elements.files_list_2,
-
-  file => run(editor().loadNewFile(repo, file))
-);
-
-
-workspace.git_workspace_changed_hooks['main.js'] = function(head) {
-  run(ckanFileBrowser.update(repo, head.commit.tree));
-};
-workspace.project_loaded_hooks['main.js'] = function(project) {
-  if (project) {
-    ui_elements.branch_span.textContent = project.name;
-    ui_elements.commit_button.textContent = 'Save';
-  } else {
-    ui_elements.branch_span.textContent = 'None';
-    ui_elements.commit_button.textContent = 'Save as new project';
-  }
-};
-
-
 import AppManager from 'app/app-manager';
-var appManager = new AppManager(q('main_pane'), projects, workspace);
+var appManager = new AppManager(q('main_pane'), projects, workspace, github);
 function editor() { return appManager.editor; }
 
 import ckanApp from 'app/ckan/application';
@@ -89,7 +63,3 @@ run(function*() {
   var welcome = new WelcomeApp();
   yield* appManager.loadApp(welcome);
 });
-
-
-// updateProjects();
-// ui_elements.close_active_project_button.onclick()

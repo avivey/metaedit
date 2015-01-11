@@ -8,6 +8,7 @@
 
 import {log, q, mkel} from 'lib/util';
 import * as network from 'lib/network';
+import * as file_browser from 'app/ckan/file_browser'; // TODO
 import Editor from 'app/ckan/editor';
 var run = externals.gen_run;
 
@@ -25,8 +26,13 @@ export default class {
 
     app_manager.workspace.git_workspace_changed_hooks['ckan'] =
       this.updateFileBrowser.bind(this);
-
     this.__editor = new Editor();
+
+    this.__file_browser = file_browser.plugInUI(
+      q('files_list_1'),
+      q('files_list_2'),
+      file => run(this.editor.loadNewFile(repo, file))
+    );
   }
 
   * destroyApp(app_manager) {
@@ -37,11 +43,11 @@ export default class {
   }
 
   get fileBrowser() {
-    // TODO
+    return this.__file_browser;
   }
 
-  updateFileBrowser() {
-    // TDOO
+  updateFileBrowser(repository, git_head) {
+    this.__file_browser.update(repository, git_head.commit.tree);
   }
 
   get editor() {

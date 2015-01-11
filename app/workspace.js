@@ -17,27 +17,27 @@ export default class {
     this._git_head = null;
 
     this.git_workspace_changed_hooks = {};
-    this.project_loaded_hooks = {}
+    this.project_loaded_hooks = {};
+    // TODO add hook for repository actually changing.
   }
 
   set gitHead(new_head) {
     this._git_head = new_head;
-    for (var k of this.git_workspace_changed_hooks)
-      this.git_workspace_changed_hooks[k](new_head);
+    for (var k in this.git_workspace_changed_hooks)
+      this.git_workspace_changed_hooks[k](this.repository, new_head);
   }
   get gitHead() { return this._git_head; }
 
   * loadProject(project, repository = project.repository) {
     // TODO if unsaved changes - boom
     var ref = project ? project.ref : 'refs/heads/master';
-
     var hash = yield repository.readRef(ref);
     var commit = yield repository.loadAs("commit", hash);
-
     this.activeProject = project;
+    this.repository = repository;
     this.gitHead = { ref, hash, commit }
 
-   for (var k in this.project_loaded_hooks)
+    for (var k in this.project_loaded_hooks)
       this.project_loaded_hooks[k](project);
   }
 

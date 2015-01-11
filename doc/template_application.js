@@ -7,7 +7,8 @@
  */
 
 
-import {log, q, mkel} from 'lib/debug'
+import {log, TODO} from 'lib/util'
+import {q, mkel} from 'lib/util'
 
 var run = externals.gen_run;
 
@@ -16,11 +17,9 @@ export default class {
   }
 
   * loadApp(main_div, app_manager) {
-
   }
 
   * destroyApp() {
-
   }
 
   applicationInformation = {
@@ -31,6 +30,8 @@ export default class {
     upstreamOrg: 'KSP-CKAN',
   }
 
-
+  get editor() {
+    throw new Error("Not implemented yet");
+  }
 }
 var q = document.getElementById.bind(document);

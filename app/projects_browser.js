@@ -2,23 +2,25 @@
 import {log, q, mkel} from 'lib/util'
 var run = externals.gen_run;
 import * as projects from 'app/projects';
+
 export default class {
+  constructor(workspace) {
+    this.workspace = workspace;
+  }
 
-  updateProjects() {
-    run(function*() {
-      var projectList = yield* projects.getAllProjects(repo);
+  * updateProjects() {
+    var projectList =
+      yield* projects.getAllProjects(this.workspace.repository);
+    var target = q('project_list');
 
-      var target = q('project_list');
+    target.innerHTML = ''
+    for (let name in projectList) {
+      let project = projectList[name];
 
-      target.innerHTML = ''
-      for (let name in projectList) {
-        let project = projectList[name];
-
-        var li = mkel("li", name, 'link_like');
-        li.onclick = () => run(workspace.loadProject(project));
-        target.appendChild(li);
-      }
-    })
+      var li = mkel("li", name, 'link_like');
+      li.onclick = () => run(this.workspace.loadProject(project));
+      target.appendChild(li);
+    }
   }
 }
 

@@ -14,11 +14,12 @@ should maybe know if it's reading master or a project?
 import {log} from 'lib/util';
 var run = externals.gen_run;
 
+
+// TODO lots of things to fix here...
 // maye make this a "constuctor", because it returns an "object"?
 // it binds some state to some functions.
 // I think i've just re-invented "module".
-export function plugInUI( // Maybe provide it with one div and let it make it's own lists, buttons, etc. or have it return the div.
-  repository,
+export function plugInUI( // TODO nothing here is really ok.
   top_level_list, level_2_list,
   load_file_event) {
 
@@ -32,7 +33,9 @@ export function plugInUI( // Maybe provide it with one div and let it make it's 
       var li = document.createElement("li");
       li.className = "link_like";
       li.innerHTML = mod.name;
-      li.onclick = () => run(displayFilesForMod(modTreeHash, mod.path));
+      li.onclick = () => {
+        run(displayFilesForMod(repository, modTreeHash, mod.path));
+      }
       target.appendChild(li);
     }
 
@@ -40,7 +43,7 @@ export function plugInUI( // Maybe provide it with one div and let it make it's 
   }
 
 
-  function* displayFilesForMod(hash, path) {
+  function* displayFilesForMod(repository, hash, path) {
     const target = level_2_list;
     target.innerHTML = '';
 
@@ -84,6 +87,7 @@ var magic_numbers = {
 }
 
 export function* listAllMods(repository, tree_hash, path = '') {
+  // TODO most code here should be in workspace or in projets.
   var tree = yield repository.loadAs('tree', tree_hash);
   var allMods = [];
   for (let name in tree) {

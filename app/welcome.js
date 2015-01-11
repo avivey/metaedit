@@ -82,4 +82,5 @@ export default class {
   }
 
   get editor() { return TODO(); }
+  get bypass_all_app_manager() { return true; }
 }

@@ -16,7 +16,7 @@ export function* getToken(username, password) {
   var body = {
     note: 'metaedit app',
     node_url: 'https://github.com/avivey/metaedit',
-    scopes: ['public_repo'],
+    scopes: ['public_repo', 'user:email'],
     client_secret: githubClientSecret,
   };
   body = JSON.stringify(body);
@@ -38,20 +38,31 @@ export function* getToken(username, password) {
 export default class {
   constructor(token) {
     this.token = token;
+
+    if (token)
+      externals.gen_run(this.loadUserData());
   }
 
-  * getAuthorInformation() {
-    if (!this.author) {
-      var [userdata, emails] = [ // TODO parallelize this.
-        yield* this.apiRequest('user'),
-        yield* this.apiRequest('user/emails')
-      ]
-
-      emails = emails.filter( mail => mail.primary )
-
-      this.author = { name: userdata.name, email: emails[0].email }
-    }
+  * getAuthorInformation() { // can probably drop the * and hope.
+    yield* this.loadUserData();
     return this.author;
+  }
+  * getUsername() {
+    yield* this.loadUserData();
+    return this.username;
+  }
+  * loadUserData() {
+    if (this.author) return;
+    // TODO handle exceptions here.
+    var [userdata, emails] = [ // TODO parallelize this.
+      yield* this.apiRequest('user'),
+      yield* this.apiRequest('user/emails')
+    ]
+
+    emails = emails.filter( mail => mail.primary )
+
+    this.author = { name: userdata.name, email: emails[0].email }
+    this.username = userdata.login;
   }
 
   * apiRequest(api_uri, body = undefined, method = 'GET') {
@@ -102,6 +113,11 @@ export default class {
 
     var upstreamHash = yield upstream.readRef('refs/heads/master');
     yield repository.updateRef('refs/heads/master', upstreamHash);
+  }
+
+  loadRepository(repo_name) {
+    // TODO if repo_name doesn't contain '/'{ repo_name=username+'/'+repo_name}
+    return externals.jsgit.connect_to_repo(repo_name, this.token);
   }
 }
 function squashChanges(base, workbranch, targetBranch) {

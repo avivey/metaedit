@@ -1,6 +1,10 @@
 Application dev guide
 =====================
 
+General:
+--------
+Only one application is active at a given time.
+
 Interface:
 ----------
 Application object:
@@ -11,9 +15,12 @@ Application object:
     variables used by the system to set-up the application (Fork and update the
     relevant repo).
 
-  * loadApp(main_div, app_manager)
-  * destroyApp(app_manager)
+  * loadApp(main_div, app_manager):
+  * destroyApp(app_manager):
     Called by app manager to start and stop the application.
+
+  get editor():
+    Returns the editor object (See below) used by the application.
 }
 
 Editor object:
@@ -38,7 +45,8 @@ Services:
 ---------
 The framework provides these services:
 - Projects and Workspace objects (See Interfaces).
-- Project browser (UI)
+- Project browser (UI element)
+- Anything git/GitHub: Repo management, apis, etc.
 
 
 

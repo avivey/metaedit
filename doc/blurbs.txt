@@ -1,7 +1,8 @@
 
 These ideas are anti-patterns, so we dont' support them:
 --------------
-These are bad (explain why), so metaedit does not support them:
+These are bad (TODO: explain why), so metaedit does not support them:
 - multi-file editor
 - multi-branch project
+- multi-repo changes
 - not squashing changes.

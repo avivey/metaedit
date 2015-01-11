@@ -17,7 +17,6 @@ var github = new Github(githubToken)
 import {ref_to_project_name, getAllProjects} from 'app/projects';
 import Workspace from 'app/workspace';
 import * as projects from 'app/projects';
-import * as editor from 'app/ckan/editor';
 import ProjectsBrowser from 'app/projects_browser';
 
 var workspace = new Workspace();
@@ -29,9 +28,10 @@ q('close_active_project_btn').onclick = ()=> {
   run(workspace.loadProject(null, repo));
 }
 
+
 var tmp= function() {
   run(function*() {
-    yield* workspace.saveChanges(editor);
+    yield* workspace.saveChanges(editor());
     updateProjects()
   })
 }
@@ -58,7 +58,7 @@ var ckanFileBrowser = plugInUIckan(
   ui_elements.files_list_1,
   ui_elements.files_list_2,
 
-  file => run(editor.loadNewFile(repo, file))
+  file => run(editor().loadNewFile(repo, file))
 );
 
 
@@ -78,6 +78,7 @@ workspace.project_loaded_hooks['main.js'] = function(project) {
 
 import AppManager from 'app/app-manager';
 var appManager = new AppManager(q('main_pane'), projects, workspace);
+function editor() { return appManager.editor; }
 
 import ckanApp from 'app/ckan/application';
 appManager.registerApplication(new ckanApp());

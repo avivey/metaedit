@@ -1,4 +1,7 @@
 - delete project button: check if PR is closed, warn otherwise.
 - update project. blow up if conflict.
-- login flow
-- option to always autoupdate master.
+- login flow: Store username (Currently hard-coded).
+- Note about security wrt oauth
+- Implement PR flow.
+- Docs
+- re-lint everything.

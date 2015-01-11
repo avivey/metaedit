@@ -6,8 +6,9 @@
  */
 
 
-import {log, q, mkel} from 'lib/util'
-
+import {log, q, mkel} from 'lib/util';
+import * as network from 'lib/network';
+import Editor from 'app/ckan/editor';
 var run = externals.gen_run;
 
 export default class {
@@ -20,14 +21,19 @@ export default class {
       network.request('app/ckan/navigation.f.html'),
     ];
     main_div.innerHTML = main;
-    navbar_div.innerHTML = nav;
+    q('file_browser').innerHTML = nav;
 
     app_manager.workspace.git_workspace_changed_hooks['ckan'] =
       this.updateFileBrowser.bind(this);
+
+    this.__editor = new Editor();
   }
 
   * destroyApp(app_manager) {
+    yield* this.__editor.destroy();
+
     delete app_manager.workspace.git_workspace_changed_hooks['ckan']
+    this.__editor = null;
   }
 
   get fileBrowser() {
@@ -36,6 +42,10 @@ export default class {
 
   updateFileBrowser() {
     // TDOO
+  }
+
+  get editor() {
+    return this.__editor;
   }
 
   get applicationInformation() {

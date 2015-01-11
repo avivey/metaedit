@@ -29,4 +29,10 @@ export default class {
     yield* app_object.loadApp(this.__main, this);
   }
 
+  get editor() {
+    if (! this.active_application)
+      return null;
+    return this.active_application.editor;
+  }
+
 }

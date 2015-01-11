@@ -3,19 +3,19 @@ metaedit
 
 - what, who, how
 
+Status:
+-------
+I consider this to be an MVP (Minimal Viable Product): It can be used for what
+it's meant for, but just barely.
+Interfaces will change much, and some basic features are still missing.
+Code is mostly a horrible mess. CSS is an after-thought.
+
 Usage:
 ------
 - New project is always branched of `master`. Either pick a name before
   starting, or when saving first file.
 - So you can actually browse stuff before you start editing.
 - You can update `master` with the upstream with a single click.
-
-Anti-patterns: (probably move to another txt file)
---------------
-These are bad (explain why), so metaedit does not support them:
-- multi-file editor
-- multi-branch project
-- not squashing changes.
 
 
 Build / Develop:
@@ -46,4 +46,3 @@ Used and included libs:
 - https://github.com/jdorn/json-editor (MIT)
 - https://www.npmjs.com/package/json-stable-stringify (MIT)
 - https://github.com/substack/node-browserify (MIT)
-TODO: Note about security an oauth

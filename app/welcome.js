@@ -43,15 +43,20 @@ export default class {
       var img = mkel('img');
       img.src = info.avatar;
 
+      var l2 = mkel('li', 'Update and Launch', 'link_like disabled');
+      var l1 = mkel('li', 'Fork and Launch', 'link_like disabled');
+      var l3 = mkel('li', 'Launch without updating', 'link_like');
+
+      l3.onclick = () => run(app_manager.loadApp(app));
+
+
       var body = mkel(
         'div',
-        [ mkel('h3', info.name),
+        [
+          mkel('h3', info.name),
           info.description,
-          mkel(
-            'ul',
-            '<li class="disabled">Fork and Launch</li>' +
-            '<li >Launch</li>' +
-            '<li class="disabled">Update and Launch</li>')],
+          mkel('ul', [l1, l2, l3])
+        ],
         'body');
 
       launcher.appendChild(mkel('div', [img, body], 'app_launcher_item'));
@@ -75,4 +80,6 @@ export default class {
 
   * destroyApp() {
   }
+
+  get editor() { return TODO(); }
 }

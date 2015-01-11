@@ -42,7 +42,7 @@ export default class {
   }
 
   * saveChanges(editor) {
-    if (!editor.isEditorChanged) {
+    if (!editor.isEditorChanged()) {
       log('No changes in editor - not committing');
       return;
     }

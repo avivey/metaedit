@@ -1,6 +1,7 @@
 
 import {log, q, mkel} from 'lib/util'
-
+var run = externals.gen_run;
+import * as projects from 'app/projects';
 export default class {
 
   updateProjects() {

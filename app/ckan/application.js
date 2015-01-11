@@ -18,10 +18,6 @@ export default class {
 
     app_manager.workspace.git_workspace_changed_hooks['ckan'] =
       this.updateFileBrowser.bind(this);
-    app_manager.workspace.project_loaded_hooks['ckan'] = (project) => {
-      q('current_project').innerHTML = project ? project.name : '<i>none</i>';
-    }
-
 
     this.__editor = new Editor();
     q('save_changes').onclick = () => {
@@ -34,6 +30,16 @@ export default class {
       file =>
         run(this.editor.loadNewFile(app_manager.workspace.repository, file))
     );
+
+    // TODO these should be somewhere more global
+    app_manager.workspace.project_loaded_hooks['ckan'] = (project) => {
+      q('current_project').innerHTML = project ? project.name : '<i>none</i>';
+    }
+    q('close_project').onclick = () => {
+      run(app_manager.workspace.loadProject(
+        null,
+        app_manager.workspace.repository));
+    }
   }
 
   * destroyApp(app_manager) {

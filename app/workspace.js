@@ -41,13 +41,17 @@ export default class {
   * loadProject(project, repository = project.repository) {
     // TODO if unsaved changes - boom
     var ref = project ? project.ref : 'refs/heads/master';
-    var hash = yield repository.readRef(ref);
-    var commit = yield repository.loadAs("commit", hash);
     this.activeProject = project;
     this.repository = repository;
-    this.gitHead = { ref, hash, commit }
+    this.gitHead = yield* this.__readRef(repository, ref)
 
     invokeHooks(this.project_loaded_hooks, project);
+  }
+
+  * __readRef(repository, ref) {
+    var hash = yield repository.readRef(ref);
+    var commit = yield repository.loadAs("commit", hash);
+    return {ref, hash, commit};
   }
 
   * saveChanges(editor) {
@@ -62,7 +66,8 @@ export default class {
       var name = editor.suggestProjectName();
       name = name || prompt("Enter name for new project:");
       if (!name) return;
-      var project = projects.createNewProject(this.repository, name);
+      project = projects.createNewProject(this.repository, name);
+      head = yield* this.__readRef(this.repository, 'refs/heads/master');
     }
     var content = editor.getContentAsString()
     yield* this.__github.saveFile(

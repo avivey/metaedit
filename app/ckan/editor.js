@@ -43,6 +43,8 @@ export default class {
     this.json_editor.setValue(content);
     this.editor_changed = false;
     q('changes_marker_span').textContent = 'No changes'; // TODO delay this
+
+    q('save_as_btn').onclick = () => this.createNewVersion();
   }
 
   getContentAsString() {
@@ -61,7 +63,18 @@ export default class {
   }
 
   suggestProjectName() {
-    return null;
+    return this.active_file.name;
+  }
+
+  createNewVersion() {
+    // TODO replace with something smarter.
+    if (!this.active_file) return;
+    var name = prompt('new filename?', this.active_file.name);
+    if (name == this.active_file.name) return;
+    this.active_file = {
+      name,
+      path: this.active_file.name.replace(this.active_file.name, name)
+    }
   }
 
   makeJsonEditor(schema) {

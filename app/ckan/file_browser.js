@@ -11,7 +11,7 @@ should maybe know if it's reading master or a project?
 */
 "use strict";
 
-import {log} from 'lib/util';
+import {log, q, clearElement, mkel} from 'lib/util';
 var run = externals.gen_run;
 
 
@@ -27,51 +27,48 @@ export function plugInUI( // TODO nothing here is really ok.
     var allMods = yield* listAllMods(repository, root_hash);
     var target = top_level_list;
 
-    target.innerHTML = '';
+    clearElement(target);
+    var frag = document.createDocumentFragment();
     for (let mod of allMods) {
       let modTreeHash = mod.hash;
-      var li = document.createElement("li");
-      li.className = "link_like";
-      li.innerHTML = mod.name;
+      var li = mkel('li', mod.name, 'link_like');
       li.onclick = () => {
-        run(displayFilesForMod(repository, modTreeHash, mod.path));
+        run(displayFilesForMod(repository, modTreeHash, mod));
       }
-      target.appendChild(li);
+      frag.appendChild(li);
     }
+    target.appendChild(frag);
 
     backToFileList();
   }
+    q('back_btn').onclick = backToFileList; // TODO only once.
 
 
-  function* displayFilesForMod(repository, hash, path) {
+  function* displayFilesForMod(repository, hash, mod) {
     const target = level_2_list;
-    target.innerHTML = '';
+    clearElement(target);
 
-    var li = document.createElement("li");
-    li.className = "link_like";
-    li.innerHTML = "BACK";
-    li.onclick = backToFileList
-    target.appendChild(li);
+    // TODO read one file, get mod name, display that instead.
+    q('level_2_title').innerHTML = mod.name;
 
-    var files = yield* listFilesForMod(repository, hash, path);
+    var frag = document.createDocumentFragment();
+    var files = yield* listFilesForMod(repository, hash, mod.path);
     for (let file of files) {
-      li = document.createElement("li");
-      li.className = "link_like";
-      li.innerHTML = file.name;
+      var li = mkel('li', version(file.name), 'link_like');
       li.onclick = () => load_file_event(file);
-      target.appendChild(li);
+      frag.appendChild(li);
     }
+    target.appendChild(frag);
 
-    target.hidden = false;
+    q('files_list_2_group').hidden = false;
     top_level_list.hidden = true;
   }
 
   function backToFileList() {
     top_level_list.hidden = false;
-    level_2_list.hidden = true;
-    level_2_list.innerHTML = '';
+    q('files_list_2_group').hidden = true;
+    clearElement(level_2_list);
   }
-
 
   return {
     update // TODO updateRoot? also document.
@@ -114,3 +111,9 @@ export function* listFilesForMod(repository, tree_hash, path) {
   return files;
 }
 
+// Only accept filenames that have exactly one dash in them.
+var version_re = /^[^-]*-([^-]*)\.ckan$/;
+function version(filename) {
+  var match = filename.match(version_re);
+  return match ? match[1] : filename
+}

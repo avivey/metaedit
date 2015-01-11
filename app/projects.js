@@ -16,7 +16,8 @@ import {refs_namespace} from 'app/config';
 
 
   Project is almost identical to branch.
-  Consider if `master` is "project" or "almost project" or if we need an
+
+  TODO: Consider if `master` is "project" or "almost project" or if we need an
   abstraction for "branch".
 */
 

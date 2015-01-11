@@ -19,6 +19,9 @@ export default class {
     app_manager.workspace.git_workspace_changed_hooks['ckan'] =
       this.updateFileBrowser.bind(this);
     this.__editor = new Editor();
+    q('save_changes').onclick = () => {
+      run(app_manager.workspace.saveChanges(this.__editor));
+    }
 
     this.__file_browser = file_browser.plugInUI(
       q('files_list_1'),

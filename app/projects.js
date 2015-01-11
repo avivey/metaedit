@@ -75,7 +75,7 @@ export function* getAllProjects(repository) {
   return all_projects;
 }
 
-var new_project_name_re = /^[a-z][a-z0-9_-]*$/i;
+var new_project_name_re = /^[a-z][a-z0-9_\.-]*$/i;
 export function createNewProject(repository, name) {
   name = name.replace(' ', '_');
   if (!name.match(new_project_name_re))

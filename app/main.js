@@ -17,7 +17,7 @@ import Workspace from 'app/workspace';
 import * as projects from 'app/projects';
 import ProjectsBrowser from 'app/projects_browser';
 
-var workspace = new Workspace();
+var workspace = new Workspace(github);
 var projectsBrowser = new ProjectsBrowser(workspace);
 
 q('update_projects_btn').onclick = () => {

@@ -10,11 +10,14 @@
  explore way to start change before having project name.
 */
 
-import{log, q, TODO} from 'lib/util'
+import {log, q, TODO} from 'lib/util'
+import * as projects from 'app/projects'; // TODO
+
 export default class {
-  constructor() {
+  constructor(github) {
     this.activeProject = null;
-    this._git_head = null;
+    this.__git_head = null;
+    this.__github = github;
 
     this.git_workspace_changed_hooks = {};
     this.project_loaded_hooks = {};
@@ -22,10 +25,10 @@ export default class {
   }
 
   set gitHead(new_head) {
-    this._git_head = new_head;
+    this.__git_head = new_head;
     invokeHooks(this.git_workspace_changed_hooks, this.repository, new_head);
   }
-  get gitHead() { return this._git_head; }
+  get gitHead() { return this.__git_head; }
 
   set repository(repository) {
     if (this.__repository == repository)
@@ -56,14 +59,13 @@ export default class {
     var head = this.gitHead;
     var project = this.activeProject;
     if (!project) {
-      var projects = TODO();
       var name = editor.suggestProjectName();
       name = name || prompt("Enter name for new project:");
       if (!name) return;
-      var project = projects.createNewProject(repo, name);
+      var project = projects.createNewProject(this.repository, name);
     }
     var content = editor.getContentAsString()
-    yield* github.saveFile(
+    yield* this.__github.saveFile(
       project,
       head,
       editor.getActiveFile().path,

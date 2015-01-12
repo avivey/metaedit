@@ -67,12 +67,11 @@ export function* getAllProjects(repository) {
     all_projects[name] = new Project(repository, name, ref);
   }
 
-  for (let ref of prs) {
-    const name = ref_to_project_name(ref);
-    project = all_projects[name];
+  for (let pref of prs) {
+    var project = all_projects[ref_to_project_name(pref)];
     if (!project) continue; // TODO warn here.
     // TODO if project[pr] error
-    project.pullrequest = { ref }; // TODO find pr uri.
+    project.pullrequest = { pref }; // TODO find pr uri.
   }
 
   return all_projects;

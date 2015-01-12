@@ -52,6 +52,9 @@ export default class {
     q('make_pr').onclick = () => {
       run(app_manager.workspace.createPullRequst('KSP-CKAN/CKAN-meta'))
     }
+    q('delete_project').onclick = () => {
+       run(app_manager.workspace.deleteActiveProject());
+    }
   }
 
   * destroyApp(app_manager) {

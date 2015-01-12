@@ -39,15 +39,6 @@ q('update_master_btn').onclick = function() {
   run(github.updateMaster(TODO()));
 }
 
-q('delete_project_btn').onclick = function() {
-  run(function*() { // move to projects/projects_browser.
-    var project = workspace.activeProject;
-    if (project) {
-      yield* github.deleteBranch(project);
-      updateProjects();
-    }
-  })
-}
 
 import AppManager from 'app/app-manager';
 var appManager = new AppManager(q('main_pane'), projects, workspace, github);

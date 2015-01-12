@@ -98,9 +98,9 @@ export default class {
     yield repository.updateRef(project.ref, commitHash);
   }
 
-  * deleteBranch(project) {
-    var repository = project.repository;
-    yield repository.deleteRef(project.ref);
+  * deleteBranch(repository, ref) {
+    var repository = repository;
+    yield repository.deleteRef(ref);
   }
 
   * updateMaster(application, repository= TODO()) {

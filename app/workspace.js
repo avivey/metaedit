@@ -39,6 +39,7 @@ export default class {
   get repository() { return this.__repository; }
 
   * loadProject(project, repository = project.repository) {
+  log('load project');
     // TODO if unsaved changes - boom
     var ref = project ? project.ref : 'refs/heads/master';
     this.activeProject = project;
@@ -63,7 +64,7 @@ export default class {
       'master',
       this.activeProject.ref)
     return diff.files.map(file => {
-      return {
+      return { // TODO this translation should bbe in github.js
         path: file.filename,
         name: file.filename.substring(file.filename.lastIndexOf('/') + 1),
         hash: file.sha,
@@ -96,6 +97,21 @@ export default class {
     yield* this.loadProject(project);
   }
 
+  * deleteActiveProject() {
+    if (!this.activeProject) return;
+    if (!confirm('are you sure you want to delete this project?')) return;
+    var repository = this.activeProject.repository;
+    var ref1 = this.activeProject.ref;
+    var ref2 = this.activeProject.pullrequest.ref;
+    // todo parallelize + check if ref2 exists.
+    yield* this.__github.deleteBranch(repository, ref1);
+    try {
+      yield* this.__github.deleteBranch(repository, ref2);
+    } catch (err) {
+      // It's probably ok.
+    }
+    yield* this.loadProject(null, repository);
+  }
   * createPullRequst(upstreamRepoName) { // TODO better arguments
     var project = this.activeProject;
     // get title + description
@@ -115,7 +131,7 @@ export default class {
       project.pullrequest.ref,
       title,
       body);
-log(pr)
+    log(pr);
     alert(`see it on gh: ${pr}`);
   }
 }

@@ -10,7 +10,7 @@ export default class {
 
   * updateProjects() {
     var projectList =
-      yield* projects.getAllProjects(this.workspace.repository);
+      yield* projects.getAllProjects( this.workspace.repository);
     var target = q('project_list');
 
     clearElement(target);
@@ -23,4 +23,3 @@ export default class {
     }
   }
 }
-

@@ -34,7 +34,7 @@ And in order to package them, you'll also need nodejs itself, and
 - browserify
 - minify
 
-then run build.sh to generate the bundle.
+then run dependencies.sh to generate the bundle.
 
 License:
 --------

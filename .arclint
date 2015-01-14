@@ -1,4 +1,7 @@
 {
+    "exclude": [
+        "(^ext/*min.js)"
+    ],
     "linters": {
         "chmod": {
             "type": "chmod"

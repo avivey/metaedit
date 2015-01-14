@@ -20,6 +20,7 @@ export default class {
     this.app_manager = app_manager;
     var fragment = yield network.request('app/welcome.f.html');
     target_div.innerHTML = fragment;
+    q('hostname').textContent = location.protocol + '//' + location.host;
 
     var logged_in = !!localStorage.metaedit_github_token
     q('login_state').textContent = logged_in ?

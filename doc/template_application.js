@@ -31,7 +31,7 @@ export default class {
   }
 
   get editor() {
-    throw new Error("Not implemented yet");
+    TODO("implement this")
   }
 }
 var q = document.getElementById.bind(document);

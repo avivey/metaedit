@@ -7,8 +7,6 @@ export var refs_namespace = 'metaedit';
 // Or you can use an oauth flow to get a token for the user.
 export var githubToken = localStorage['metaedit_github_token'];
 
-export var githubUsername = 'avivey'  // TODO store this.
-
 // for github ent, something like 'https://github.example.com/api/v3/'
 export var githubApiRoot = 'https://api.github.com/';
 

@@ -1,14 +1,35 @@
 metaedit
 ========
 
-- what, who, how
+Let say you have a Github repository which is a collection of computer-readable
+content, which may be hand-curated; A frequent task is "Make small change to one
+file, make pull request, and make sure you got the syntax right".
+metaedit is here to let you do that quickly, while taking care of the syntax for
+you, and - as a bonus - skip the whole part about forking, pulling, pushing and
+git-ing while it's here.
+
+metaedit is running 100% in your browser. Your edits are done directly on your
+personal Github fork of the target repository (Which metaedit will manage for
+you).
+Your changes are done in a dedicated editor, optimized* for the task at hand; No
+fiddling with correct indentation or an extra colon. The editor will* make sure
+you've got right fields and didn't misspell anything important.
+
+It's also modular*, so you can adapt it to your editor and your repository.
+
+Ideally, metaedit would allow compleatly non-technical users to make changes to
+such repositories, without hand-holding from a maintainer. For this reason,
+terminology is a little different form git/Github world - it's meant to be more
+accessible to people that never faced "version control" before, or even "files".
+
+* That's the plan; See `Status' below.
 
 Status:
 -------
-I consider this to be an MVP (Minimal Viable Product): It can be used for what
-it's meant for, but just barely.
+I consider this to be somewhere between a tech-demo and an MVP (Minimal Viable
+Product): It can be used for what it's meant for, but just barely.
 Interfaces will change much, and some basic features are still missing.
-Code is mostly a horrible mess. CSS is an after-thought.
+Code is mostly a horrible mess. UX is an after-thought.
 
 Usage:
 ------

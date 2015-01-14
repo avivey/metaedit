@@ -1,8 +1,39 @@
+Why we do some things, and why we don't do some other things.
 
-These ideas are anti-patterns, so we dont' support them:
---------------
-These are bad (TODO: explain why), so metaedit does not support them:
-- multi-file editor
-- multi-branch project
-- multi-repo changes
-- not squashing changes.
+Squashing Changes before a PR:                                            (good)
+
+We squash all the tiny commits done for a change into one big commit. I actually
+don't let the user provide a commit message for the intermediate commits.
+The reason is that all these intermediate commits would have useless comments,
+like "change that" and "fix typo" and "going to launch, brb". When, two months
+from now, you'll look for why the build broke, you only want to have the large
+commit message in the log: "Add some feature", "Fix support for IE", "Fix this
+bug".
+
+
+Multi-Repository change:                                                   (bad)
+
+If you need to change something in two repositories at the same time and keep
+them in sync, you're doing something wrong. If they must be in sync, they should
+be a single repository (Or at least look and feel like they are a single
+repository).
+
+
+Multi-Branch changes:                                                    (so-so)
+
+By that I mean have a change in one branch based on a change in another branch.
+That's not wrong in the general case, but it is wrong in the use-case metaedit
+is trying to support - small changes to metadata files.
+It's not awesome in the programming use-case either, but it's often needed, and
+is well supported by git.
+
+
+Multi-file editor:                                                         (bad)
+
+Having a single, atomic, change include two distinct files so badly, that you'd
+want your cool editor to actually do the right changes to both files at once.
+An example of that would be C file with its header file.
+This is bad enough for programming, but in the case of a metadata repository,
+it's just ridiculous: The whole thing is being fed into a computer. Let it read
+whatever it needs from one file, and do the hard work of figuring out what the
+other file would say.

@@ -1,14 +1,23 @@
 
 <h2>welcome.</h2>
 state: <span id="login_state">unknown</span>
-
 <div id="login_form" hidden>
-Github Username: <input type="text" id="w_username" value="avivey"><br>
+Your username and password are encrypted in your browser, and only sent to
+Github. They are not stored.
+<br>
+You only need to enter them once, after which we store a token in your browser.
+This token is only available to sites under the domain
+<span id='hostname'>THIS</span> - see
+<a href="http://en.wikipedia.org/wiki/Web_storage">wikipedia about Web Storage
+</a><br>
+<br>
+
+Github Username: <input type="text" id="w_username"><br>
 Password: <input type="password" id="w_password"><br>
 <button id="github_login">Login</button>
 <br><br>
-Alternate login: Enter token here:
-<input type="text" id="w_token"><button>use this</button>
+<!-- Alternate login: Enter token here:
+<input type="text" id="w_token"><button>use this</button> -->
 </div>
 <div id="logout_form" hidden></div>
 

@@ -1,9 +1,8 @@
 - delete project button: check if PR is closed, warn otherwise.
 - update project. blow up if conflict.
-- login flow: Store username (Currently hard-coded).
 - token-only login flow.
 - Note about security wrt oauth.
-- Implement PR flow.
+- Implement update PR flow.
 - Docs
 - re-lint everything.
 - see changes in a project.

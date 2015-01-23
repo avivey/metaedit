@@ -42,6 +42,14 @@ export default class {
     }
   }
 
+  * isForked(a) {
+    // var username = yield* this.__github.getUsername();
+    // var repo_name = a.repoName;
+    // var x= yield* this.__github.doesRepoExist(username + '/' + repo_name);
+    // return x;
+    return true
+  }
+
   get editor() {
     if (! this.active_application)
       return null;

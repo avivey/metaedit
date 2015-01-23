@@ -1,15 +1,10 @@
 /* Functions to interact with GitHub. Gen-run friendly.
  *
  */
-"use strict";
 import {log, TODO} from 'lib/util';
 import * as network from 'lib/network';
 
 import { githubApiRoot } from 'app/config';
-
-function unimpl() {
-  throw new Error("Not implemented");
-}
 
 import { githubClientId, githubClientSecret } from 'app/config';
 export function* getToken(username, password) {
@@ -73,6 +68,7 @@ export default class {
       ],
       method: method
     }
+
     body = JSON.stringify(body);
     var response = yield network.request(uri, body, options)
     return JSON.parse(response)
@@ -103,7 +99,7 @@ export default class {
     yield repository.deleteRef(ref);
   }
 
-  * updateMaster(application, repository= TODO()) {
+  * updateMaster(application, repository = TODO()) {
    var githubUpstreamOrg = TODO();
    var githubRepoName= TODO();
 
@@ -166,5 +162,14 @@ export default class {
     var response = yield* this.apiRequest(uri, body, 'POST');
     log(response);
     return response.html_url;
+  }
+
+  * doesRepoExist(repo_full_name) {
+    var xhr = yield network.request(
+      'repos/' + repo_full_name,
+      null,
+      { return_xhr: true });
+    // return xhr.status / 100 == 2;
+    return false
   }
 }

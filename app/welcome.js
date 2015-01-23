@@ -6,7 +6,8 @@
  */
 
 
-import {log, q, mkel} from 'lib/util';
+import {log, TODO} from 'lib/util';
+import {q, mkel} from 'lib/util';
 import * as network from 'lib/network';
 import { getToken } from 'app/github';
 
@@ -45,12 +46,21 @@ export default class {
       var img = mkel('img');
       img.src = info.avatar;
 
-      var l2 = mkel('li', 'Update and Launch', 'link_like disabled');
+
       var l1 = mkel('li', 'Fork and Launch', 'link_like disabled');
-      var l3 = mkel('li', 'Launch without updating', 'link_like');
+      var l2 = mkel('li', 'Update and Launch', 'link_like disabled');
+      var l3 = mkel('li', 'Launch without updating', 'link_like disabled');
 
-      l3.onclick = () => run(app_manager.loadApp(app));
-
+      var forked = yield* app_manager.isForked(info);
+      if (forked) {
+        l2.onclick = () => run(TODO(app_manager.loadApp(app)));
+        l2.classList.remove('disabled');
+        l3.onclick = () => run(app_manager.loadApp(app));
+        l3.classList.remove('disabled');
+      } else {
+        l1.onclick = () => TODO();
+        l1.classList.remove('disabled');
+      }
 
       var body = mkel(
         'div',

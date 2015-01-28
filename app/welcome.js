@@ -47,7 +47,7 @@ export default class {
     launcher.hidden = false;
   }
 
-  * render_app_item(app, app_manager) {
+  * render_app_item(app) {
     var info = app.applicationInformation;
 
     var img = mkel('img');
@@ -57,14 +57,14 @@ export default class {
     var update = mkel('li', 'Update and Launch', 'link_like disabled');
     var launch = mkel('li', 'Launch without updating', 'link_like disabled');
 
-    var forked = yield* app_manager.isForked(app);
+    var forked = yield* this.app_manager.isForked(app);
     if (forked) {
-      update.onclick = () => run(TODO(app_manager.loadApp(app)));
+      update.onclick = () => run(this.app_manager.loadApp(app, 'update'));
       update.classList.remove('disabled');
-      launch.onclick = () => run(app_manager.loadApp(app));
+      launch.onclick = () => run(this.app_manager.loadApp(app));
       launch.classList.remove('disabled');
     } else {
-      fork.onclick = () => TODO();
+      fork.onclick = () => run(this.app_manager.loadApp(app, 'fork'));
       fork.classList.remove('disabled');
     }
 
@@ -79,7 +79,6 @@ export default class {
 
     return mkel('div', [img, body], 'app_launcher_item');
   }
-
 
   * render_login() {
     q('github_login').onclick = ()=>

@@ -6,6 +6,7 @@
  *
  *
  */
+import {log, TODO} from 'lib/util';
 export default class {
   constructor(main_div, projects, workspace, github) {
     this.__main = main_div;   // TODO maybe move to "globals" instead?
@@ -21,16 +22,31 @@ export default class {
     this.applications.push(app_object);
   }
 
-  * loadApp(app_object) {
+  * loadApp(app_object, pre_load_action = 'nothing') {
     if (this.active_application)
       yield* this.active_application.destroyApp();
     this.__main.innerHTML = '';
 
     if (!app_object.bypass_all_app_manager) {
-    // Load repo. TODO
+      var info = app_object.applicationInformation;
       var username = yield* this.__github.getUsername();
-      var repo_name = app_object.applicationInformation.repoName;
-      var repository = this.__github.loadRepository(username + '/' + repo_name);
+      var repository = this.__github.loadRepository(
+        username + '/' + info.repoName);
+
+      switch (pre_load_action) {
+        case 'fork':
+          TODO('fork');
+          break;
+
+        case 'update':
+          var upstream = info.upstreamOrg + '/' + info.repoName;
+          yield* this.__github.updateMaster(repository, upstream);
+          break;
+
+        case 'nothing':
+        default:
+          break;
+      }
     }
 
     this.active_application = app_object;

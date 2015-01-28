@@ -99,13 +99,10 @@ export default class {
     yield repository.deleteRef(ref);
   }
 
-  * updateMaster(application, repository = TODO()) {
-   var githubUpstreamOrg = TODO();
-   var githubRepoName= TODO();
-
+  * updateMaster(repository, upstream_repo_name) {
    var upstream = externals.jsgit.connect_to_repo(
-      githubUpstreamOrg+'/'+githubRepoName,
-      this.githubToken);
+      upstream_repo_name,
+      this.token);
 
     var upstreamHash = yield upstream.readRef('refs/heads/master');
     yield repository.updateRef('refs/heads/master', upstreamHash);

@@ -35,10 +35,6 @@ var tmp= function() {
     updateProjects()
   })
 }
-q('update_master_btn').onclick = function() {
-  run(github.updateMaster(TODO()));
-}
-
 
 import AppManager from 'app/app-manager';
 var appManager = new AppManager(q('main_pane'), projects, workspace, github);

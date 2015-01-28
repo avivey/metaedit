@@ -53,19 +53,19 @@ export default class {
     var img = mkel('img');
     img.src = info.avatar;
 
-    var l1 = mkel('li', 'Fork and Launch', 'link_like disabled');
-    var l2 = mkel('li', 'Update and Launch', 'link_like disabled');
-    var l3 = mkel('li', 'Launch without updating', 'link_like disabled');
+    var fork = mkel('li', 'Fork and Launch', 'link_like disabled');
+    var update = mkel('li', 'Update and Launch', 'link_like disabled');
+    var launch = mkel('li', 'Launch without updating', 'link_like disabled');
 
     var forked = yield* app_manager.isForked(app);
     if (forked) {
-      l2.onclick = () => run(TODO(app_manager.loadApp(app)));
-      l2.classList.remove('disabled');
-      l3.onclick = () => run(app_manager.loadApp(app));
-      l3.classList.remove('disabled');
+      update.onclick = () => run(TODO(app_manager.loadApp(app)));
+      update.classList.remove('disabled');
+      launch.onclick = () => run(app_manager.loadApp(app));
+      launch.classList.remove('disabled');
     } else {
-      l1.onclick = () => TODO();
-      l1.classList.remove('disabled');
+      fork.onclick = () => TODO();
+      fork.classList.remove('disabled');
     }
 
     var body = mkel(
@@ -73,7 +73,7 @@ export default class {
       [
         mkel('h3', info.name),
         info.description,
-        mkel('ul', [l1, l2, l3])
+        mkel('ul', [fork, update, launch])
       ],
       'body');
 

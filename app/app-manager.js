@@ -40,7 +40,7 @@ export default class {
 
         case 'update':
           var upstream = info.upstreamOrg + '/' + info.repoName;
-          yield* this.__github.updateMaster(repository, upstream);
+          var bug = yield* this.__github.updateMaster(repository, upstream);
           break;
 
         case 'nothing':

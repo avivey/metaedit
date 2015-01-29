@@ -5,4 +5,5 @@
 - Implement update PR flow.
 - Docs
 - re-lint everything.
+- project/branch list is cached for 60 seconds. Find workaround.
 - see changes in a project.

@@ -35,7 +35,8 @@ export default class {
 
       switch (pre_load_action) {
         case 'fork':
-          TODO('fork');
+          var upstream = info.upstreamOrg + '/' + info.repoName;
+          var bug = yield* this.__github.forkRepo(upstream);
           break;
 
         case 'update':
@@ -58,12 +59,9 @@ export default class {
     }
   }
 
-  * isForked(a) {
-    // var username = yield* this.__github.getUsername();
-    // var repo_name = a.repoName;
-    // var x= yield* this.__github.doesRepoExist(username + '/' + repo_name);
-    // return x;
-    return true
+  * isForked(info) {
+    var username = yield* this.__github.getUsername();
+    return yield* this.__github.doesRepoExist(username + '/' + info.repoName);
   }
 
   get editor() {

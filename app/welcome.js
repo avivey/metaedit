@@ -57,7 +57,7 @@ export default class {
     var update = mkel('li', 'Update and Launch', 'link_like disabled');
     var launch = mkel('li', 'Launch without updating', 'link_like disabled');
 
-    var forked = yield* this.app_manager.isForked(app);
+    var forked = yield* this.app_manager.isForked(info);
     if (forked) {
       update.onclick = () => run(this.app_manager.loadApp(app, 'update'));
       update.classList.remove('disabled');

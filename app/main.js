@@ -40,9 +40,10 @@ import AppManager from 'app/app-manager';
 var appManager = new AppManager(q('main_pane'), projects, workspace, github);
 function editor() { return appManager.editor; }
 
-import ckanApp from 'app/ckan/application';
-appManager.registerApplication(new ckanApp());
-appManager.registerApplication(new ckanApp());
+import CkanApp from 'app/ckan/application';
+appManager.registerApplication(new CkanApp());
+import DemoApp from 'app/demo-app';
+appManager.registerApplication(new DemoApp());
 
 import WelcomeApp from 'app/welcome';
 run(function*() {

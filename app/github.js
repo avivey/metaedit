@@ -61,6 +61,8 @@ export default class {
   }
 
   * apiRequest(api_uri, body = undefined, method = 'GET') {
+    if (api_uri.charAt(0) == '/')
+        throw new Error('api_uri should ommit initial /.');
     var uri = githubApiRoot + api_uri;
     var options = {
       headers: [
@@ -157,16 +159,16 @@ export default class {
       base: 'master',
     }
     var response = yield* this.apiRequest(uri, body, 'POST');
-    log(response);
     return response.html_url;
   }
 
+  * forkRepo(source_repo) {
+    var uri = `repos/${source_repo}/forks`;
+    var response = yield* this.apiRequest(uri, null, 'POST');
+  }
+
   * doesRepoExist(repo_full_name) {
-    var xhr = yield network.request(
-      'repos/' + repo_full_name,
-      null,
-      { return_xhr: true });
-    // return xhr.status / 100 == 2;
-    return false
+    var response = yield* this.apiRequest('repos/' + repo_full_name);
+    return response.id !== undefined;
   }
 }
